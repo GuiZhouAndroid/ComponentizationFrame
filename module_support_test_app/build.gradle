@@ -1,0 +1,45 @@
+plugins {
+    id 'com.android.application'
+}
+
+//config.gradle根目录变量全局
+def app = rootProject.ext.androidConfig
+def appIdConfig = rootProject.ext.applicationIdConfig
+def appNamespaceConfig = rootProject.ext.namespaceConfig
+def dep = rootProject.ext.dependenciesConfig
+
+android {
+    namespace appNamespaceConfig["namespace_module_support_test_app"]
+    compileSdk app["compileSdk"]
+    buildToolsVersion app["buildToolsVersion"]
+
+    defaultConfig {
+        applicationId appIdConfig["module_support_test_app_id"]
+        minSdk app["minSdk"]
+        targetSdk app["targetSdk"]
+        versionCode app["versionCode"]
+        versionName app["versionName"]
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    //开启dataBinding
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    //框架资源库
+    implementation project(':lib_support_all_core')
+}

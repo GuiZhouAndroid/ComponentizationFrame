@@ -1,0 +1,47 @@
+plugins {
+    id 'com.android.library'
+}
+//sonatype平台的maven中央库配置文件
+//发布版
+//apply from: "release-sonatype-publish.gradle"
+//开发版
+apply from: "snapshot-sonatype-publish.gradle"
+
+//config.gradle根目录变量全局
+def app = rootProject.ext.androidConfig
+def appNamespaceConfig = rootProject.ext.namespaceConfig
+def dep = rootProject.ext.dependenciesConfig
+
+android {
+    namespace appNamespaceConfig["namespace_lib_support_utils"]
+    compileSdk app["compileSdk"]
+    buildToolsVersion app["buildToolsVersion"]
+
+    defaultConfig {
+        minSdk app["minSdk"]
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    //androidx
+    implementation(dep["appcompat"])
+
+    //阿里云OSS
+    implementation(dep["oss-android-sdk"]) {
+        //排除自带的旧版本okhttp3
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+        exclude group: 'com.squareup.okio', module: 'okio'
+    }
+
+    //OkHttp3
+    implementation(dep["okhttp"])
+    implementation(dep["okio"])
+    //Log打印
+    implementation(dep["logger"])
+}

@@ -1,0 +1,55 @@
+plugins {
+    id 'com.android.application'
+}
+
+static def buildTime() {
+    return new Date().format("yyyyMMdd");
+}
+
+//config.gradle根目录变量全局
+def app = rootProject.ext.androidConfig
+def appIdConfig = rootProject.ext.applicationIdConfig
+def appNamespaceConfig = rootProject.ext.namespaceConfig
+def dep = rootProject.ext.dependenciesConfig
+
+android {
+    namespace appNamespaceConfig["namespace_module_business_fgstore_app"]
+    compileSdk app["compileSdk"]
+    buildToolsVersion app["buildToolsVersion"]
+
+    defaultConfig {
+        applicationId appIdConfig["module_business_fgstore_app_id"]
+        minSdk app["minSdk"]
+        targetSdk app["targetSdk"]
+        versionCode app["versionCode"]
+        versionName app["versionName"]
+        //打包时间
+        resValue "string", "build_time", buildTime()
+        multiDexEnabled true
+    }
+
+    //不推荐在业务组件的build.gradle文件中配置 buildTypes，导致出现混淆打包等BUG时，依据错误日志不便于修改和管理
+    buildTypes {
+        release {
+            //组件化项目的Java代码混淆方案采用在集成模式下集中在app壳工程中混淆，各个业务组件不配置混淆文件。
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    //组件模式仅依赖公共库
+    implementation(project(':lib_support_all_core'))
+    //集成模式依赖所有module业务组件
+    if (!isModuleMode) {
+        implementation(project(':module_business_main'))
+        implementation(project(':module_business_oneself'))
+        implementation(project(':module_business_pay'))
+    }
+}

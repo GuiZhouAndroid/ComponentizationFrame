@@ -1,0 +1,118 @@
+plugins {
+    id 'com.android.library'
+}
+
+//config.gradle根目录变量全局
+def app = rootProject.ext.androidConfig
+def appNamespaceConfig = rootProject.ext.namespaceConfig
+def dep = rootProject.ext.dependenciesConfig
+
+android {
+    namespace appNamespaceConfig["namespace_lib_support_all_core"]
+    compileSdk app["compileSdk"]
+    buildToolsVersion app["buildToolsVersion"]
+
+    defaultConfig {
+        minSdk app["minSdk"]
+        multiDexEnabled true
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    //AS版本支持
+    api platform(dep["protobuf-java"])
+    api platform(dep["kotlin-bom"])
+
+    //框架资源库
+    api project(':lib_support_resource')
+
+    //对话框
+    api project(':lib_support_dialog')
+
+    //mvp
+    api project(':lib_support_mvp')
+
+    //网络
+    api project(':lib_support_network')
+
+    //滑动返回
+    api project(':lib_support_swipeback')
+
+    //工具库
+    api project(':lib_support_utils')
+
+    //日志记录
+//    api dep["acra"]
+//    api dep["acra-mail"]
+//    api dep["acra-dialog"]
+//    api dep["acra-toast"]
+//    api dep["acra-notification"]
+//    api dep["acra-limiter"]
+//    api dep["acra-advanced-scheduler"]
+//    api dep["acra-core"]
+
+    //androidx
+    api(dep["appcompat"])
+    api(dep["multidex"])
+
+    //material
+    api(dep["material"])
+
+    //阿里router
+    api(dep["arouter-api"])
+
+    //阿里云OSS
+    api(dep["oss-android-sdk"]) {
+        //排除自带的旧版本okhttp3
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+        exclude group: 'com.squareup.okio', module: 'okio'
+    }
+    //gson
+    api(dep["gson"]) //手动指定覆盖为最新版Gson2.10.1
+
+    //OkHttp3
+    api(dep["okhttp"])
+    api(dep["okio"])
+    api(dep["logging-interceptor"]) //日志拦截器
+
+    //Retrofit2
+    api(dep["adapter-rxjava3"]) //retrofit2专用rxjava3适配器
+    api(dep["retrofit"]) {
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+        exclude group: 'com.squareup.okio', module: 'okio'
+    }
+    api(dep["converter-gson"]) {
+        //内部封装了Gson2.8.5 这里不使用封装默认的低版本2.8.5版本，手动指定覆盖为最新版2.10.1
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
+    api(dep["converter-scalars"])
+    api(dep["converter-jackson"])
+    api(dep["converter-simplexml"])
+    api(dep["converter-protobuf"])
+    api(dep["converter-jaxb"])
+    api(dep["converter-java8"])
+    api(dep["converter-guava"])
+    api(dep["converter-moshi"])
+    api(dep["converter-wire"])
+    //Log打印
+    api(dep["logger"])
+    // rxJava3
+    api(dep["rxjava"])
+    api(dep["rxandroid"])//Android项目使用rxjava3，通常会使用rxjava3的rxAndroid库,专注Android特性而设计
+
+    //AutoDispose：是一种RxJava工具，用于通过处置/取消将RxJava流的执行自动绑定到提供的作用域
+    api(dep["autodispose-android"])
+    api(dep["autodispose-androidx-lifecycle"])
+
+    //lombok
+    compileOnly(dep["lombok"])
+    //自定义View
+    api(dep["library"])
+}

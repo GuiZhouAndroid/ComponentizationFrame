@@ -1,0 +1,66 @@
+// 根据 isModuleMode 动态切换 集成模式 / 组件模式
+if (isModuleMode) {
+    // 组件模式
+    apply plugin: 'com.android.application'
+} else {
+    // 集成模式
+    apply plugin: 'com.android.library'
+}
+
+//config.gradle根目录变量全局
+def app = rootProject.ext.androidConfig
+def appIdConfig = rootProject.ext.applicationIdConfig
+def appNamespaceConfig = rootProject.ext.namespaceConfig
+def dep = rootProject.ext.dependenciesConfig
+
+android {
+    namespace appNamespaceConfig["namespace_module_business_pay"]
+    compileSdk app["compileSdk"]
+    buildToolsVersion app["buildToolsVersion"]
+
+    defaultConfig {
+        if (isModuleMode) {
+            // 组件模式 : 必须配置 applicationId
+            applicationId appIdConfig["module_business_pay_id"]
+        }
+        minSdk app["minSdk"]
+        targetSdk app["targetSdk"]
+        versionCode app["versionCode"]
+        versionName app["versionName"]
+        multiDexEnabled true
+
+        //ARouter路由使用
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    //资源配置：切换模式选择AndroidManifest
+    sourceSets {
+        main {
+            if (isModuleMode) {//组件模式
+                manifest.srcFile 'src/main/component/AndroidManifest.xml'
+            } else {//集成模式
+                //使用默认设置AndroidManifest
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+                //排除develop文件夹中的所有Java文件
+                java {
+                    exclude 'develop/**'
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation(fileTree(dir: 'libs', include: ['*.jar']))
+    annotationProcessor(dep["arouter-compiler"])
+    implementation(project(':lib_support_all_core'))
+}

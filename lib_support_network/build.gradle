@@ -1,0 +1,78 @@
+plugins {
+    id 'com.android.library'
+}
+
+//sonatype平台的maven中央库配置文件
+//发布版
+//apply from: "release-sonatype-publish.gradle"
+//开发版
+apply from: "snapshot-sonatype-publish.gradle"
+
+//config.gradle根目录变量全局
+def app = rootProject.ext.androidConfig
+def appNamespaceConfig = rootProject.ext.namespaceConfig
+def dep = rootProject.ext.dependenciesConfig
+
+android {
+    namespace appNamespaceConfig["namespace_lib_support_network"]
+    compileSdk app["compileSdk"]
+    buildToolsVersion app["buildToolsVersion"]
+
+    defaultConfig {
+        minSdk app["minSdk"]
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    //弹窗
+    implementation(project(':lib_support_dialog'))
+
+    //androidx
+    implementation(dep["appcompat"])
+
+    //material
+    implementation(dep["material"])
+
+    //gson
+    implementation(dep["gson"]) //手动指定覆盖为最新版Gson2.10.1
+
+    //OkHttp3
+    implementation(dep["okhttp"])
+    implementation(dep["okio"])
+    implementation(dep["logging-interceptor"]) //日志拦截器
+
+    //Retrofit2
+    implementation(dep["adapter-rxjava3"]) //retrofit2专用rxjava3适配器
+    implementation(dep["retrofit"]) {
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+        exclude group: 'com.squareup.okio', module: 'okio'
+    }
+    implementation(dep["converter-gson"]) {
+        //内部封装了Gson2.8.5 这里不使用封装默认的低版本2.8.5版本，手动指定覆盖为最新版2.10.1
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
+    implementation(dep["converter-scalars"])
+    implementation(dep["converter-jackson"])
+    implementation(dep["converter-simplexml"])
+    implementation(dep["converter-protobuf"])
+    implementation(dep["converter-jaxb"])
+    implementation(dep["converter-java8"])
+    implementation(dep["converter-guava"])
+    implementation(dep["converter-moshi"])
+    implementation(dep["converter-wire"])
+
+    // rxJava3
+    implementation(dep["rxjava"])
+    implementation(dep["rxandroid"]) //Android项目使用rxjava3，通常会使用rxjava3的rxAndroid库,专注Android特性而设计
+
+    //AutoDispose：是一种RxJava工具，用于通过处置/取消将RxJava流的执行自动绑定到提供的作用域
+    implementation(dep["autodispose-android"])
+    implementation(dep["autodispose-androidx-lifecycle"])
+}
