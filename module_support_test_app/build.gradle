@@ -40,6 +40,11 @@ android {
     }
 }
 
+// 组件缓存更新时间设置（默认每次build都更新）
+configurations.configureEach {
+    resolutionStrategy.cacheChangingModulesFor 0, 'minutes'
+}
+
 dependencies {
     implementation project(':lib_frame_core')
 }

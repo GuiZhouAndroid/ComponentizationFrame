@@ -33,7 +33,15 @@ android {
     }
 }
 
+// 组件缓存更新时间设置（默认每次build都更新）
+configurations.configureEach {
+    resolutionStrategy.cacheChangingModulesFor 0, 'minutes'
+}
+
 dependencies {
+    //AS版本支持
+    implementation platform(dep["protobuf-java"])
+    implementation platform(dep["kotlin-bom"])
     //自定义对话框
     implementation(dep["my-lib-dialog"])
     //滑动返回

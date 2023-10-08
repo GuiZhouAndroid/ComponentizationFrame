@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import zsdev.work.lib.support.utils.LogUtil;
 import zsdev.work.module.business.pay.PayActivity;
 
 /**
@@ -25,5 +26,7 @@ public class PayLaunchActivity extends AppCompatActivity {
         intent.putExtra("组件开发【支付】", "【支付】我是组件开发模式模拟传值");
         startActivity(intent);
         finish();
+        LogUtil.i("测试123");
+
     }
 }

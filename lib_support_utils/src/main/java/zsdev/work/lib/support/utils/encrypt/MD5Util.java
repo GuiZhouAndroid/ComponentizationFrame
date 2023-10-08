@@ -3,12 +3,16 @@ package zsdev.work.lib.support.utils.encrypt;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import zsdev.work.lib.support.utils.LogUtil;
+
 /**
  * Created: by 2023-09-26 10:14
  * Description:  MD5加密 不可逆
  * Author: 张松
  */
 public class MD5Util {
+
+    private static final String TAG = "MD5Util";
 
     private MD5Util() {
         throw new UnsupportedOperationException("cannot be instantiated");
@@ -66,6 +70,39 @@ public class MD5Util {
             e.printStackTrace();
         }
         return buffer.toString();
+    }
+
+    /**
+     * md5加密
+     *
+     * @param plainText 待加密字符串
+     * @return 加密后32位字符串
+     */
+    public static String getMd5(String plainText) {
+
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(plainText.getBytes());
+            byte b[] = md.digest();
+
+            int i;
+
+            StringBuffer buf = new StringBuffer("");
+            for (int offset = 0; offset < b.length; offset++) {
+                i = b[offset];
+                if (i < 0)
+                    i += 256;
+                if (i < 16)
+                    buf.append("0");
+                buf.append(Integer.toHexString(i));
+            }
+            //32位加密
+            return buf.toString();
+        } catch (NoSuchAlgorithmException e) {
+            LogUtil.e(TAG, "getMd5 error", e);
+            return null;
+        }
+
     }
 }
 

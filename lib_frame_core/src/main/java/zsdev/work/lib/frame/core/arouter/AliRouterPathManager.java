@@ -6,5 +6,6 @@ package zsdev.work.lib.frame.core.arouter;
  * Author: 张松
  */
 public class AliRouterPathManager {
-    public static final String MODULE_ONESELF_ACTIVITY = "/module_oneself/OneSelfActivity";
+    public static final String MODULE_BUSINESS_ONESELF_ACTIVITY = "/module_business_oneself/OneSelfActivity";
+    public static final String MODULE_BUSINESS_PAY_ACTIVITY = "/module_business_pay/PayActivity";
 }

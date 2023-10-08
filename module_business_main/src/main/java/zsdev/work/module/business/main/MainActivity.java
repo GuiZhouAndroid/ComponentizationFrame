@@ -1,6 +1,5 @@
 package zsdev.work.module.business.main;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -40,7 +39,7 @@ public class MainActivity extends BaseActivity {
         btnOneself.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ARouter.getInstance().build(AliRouterPathManager.MODULE_ONESELF_ACTIVITY)
+                ARouter.getInstance().build(AliRouterPathManager.MODULE_BUSINESS_ONESELF_ACTIVITY)
                         .withFloat("myInfo1", 25.3F)
                         .withString("myInfo2", "1998年2月1日")
                         .withSerializable("ser", new User("张松", "男"))
@@ -50,13 +49,12 @@ public class MainActivity extends BaseActivity {
         btnPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //ARouter.getInstance().build("/pay/all").navigation();
-                ActivityOptionsCompat compat = ActivityOptionsCompat.
-                        makeScaleUpAnimation(v, v.getWidth() / 2, v.getHeight() / 2, 0, 0);
-                Uri testUriMix = Uri.parse("arouter://m.aliyun.com/pay/all");
-                ARouter.getInstance().build(testUriMix)
-                        .withString("key1", "value1")
+                ActivityOptionsCompat compat = ActivityOptionsCompat.makeScaleUpAnimation(v, v.getWidth() / 2, v.getHeight() / 2, 0, 0);
+                //Uri testUriMix = Uri.parse("arouter://m.aliyun.com/pay/all");
+                //ARouter.getInstance().build(testUriMix).withOptionsCompat(compat).withString("key1", "value1").withOptionsCompat(compat).navigation();
+                ARouter.getInstance().build(AliRouterPathManager.MODULE_BUSINESS_PAY_ACTIVITY)
                         .withOptionsCompat(compat)
+                        .withString("key1", "我是传给PayActivity的路由值")
                         .navigation();
 
             }

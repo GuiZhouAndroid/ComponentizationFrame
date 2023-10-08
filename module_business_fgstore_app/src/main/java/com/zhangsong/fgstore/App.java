@@ -4,6 +4,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 
 import zsdev.work.lib.support.mvp.BaseApplication;
 import zsdev.work.lib.support.utils.InitUtil;
+import zsdev.work.lib.support.utils.LogUtil;
 
 
 /**
@@ -21,6 +22,8 @@ public class App extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        //初始化日志工具类
+        LogUtil.setLogEnable(true);
         instance = this;
         initARouter();
     }

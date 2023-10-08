@@ -1,6 +1,7 @@
 package zsdev.work.module.support.test.app;
 
 import zsdev.work.lib.support.mvp.BaseApplication;
+import zsdev.work.lib.support.utils.LogUtil;
 
 
 /**
@@ -13,5 +14,6 @@ public class App extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        LogUtil.setLogEnable(false);
     }
 }

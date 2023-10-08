@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!--支撑预览方针界面：android:enableOnBackInvokedCallback="true"-->
     <application
         android:name=".App"
         android:allowBackup="true"
+        android:enableOnBackInvokedCallback="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/module_business_fgstore_app"
         android:networkSecurityConfig="@xml/network_security_config"

@@ -8,7 +8,6 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 
-
 import zsdev.work.lib.frame.core.arouter.AliRouterPathManager;
 import zsdev.work.lib.frame.core.bean.User;
 import zsdev.work.lib.support.mvp.BaseActivity;
@@ -20,7 +19,7 @@ import zsdev.work.lib.support.utils.LogUtil;
  * Description:
  * Author: 张松
  */
-@Route(path = AliRouterPathManager.MODULE_ONESELF_ACTIVITY, name = "我的")
+@Route(path = AliRouterPathManager.MODULE_BUSINESS_ONESELF_ACTIVITY, name = "我的")
 public class OneSelfActivity extends BaseActivity {
 
     @Autowired(name = "myInfo1")
@@ -67,9 +66,9 @@ public class OneSelfActivity extends BaseActivity {
 //        String s = getIntent().getExtras().getString("myInfo2");
 
         if (aLong != 0 && string != null && ser != null) {
-            showMsg("myInfo1=" + aLong + ",myInfo2=" + string + ",ser=" + ser.toString());
+            shortShowMsg("myInfo1=" + aLong + ",myInfo2=" + string + ",ser=" + ser.toString());
         } else {
-            showMsg("当前是开发模式！");
+            longShowMsg("当前是开发模式！");
         }
     }
 }

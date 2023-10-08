@@ -1,5 +1,8 @@
 package zsdev.work.lib.support.utils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * 字符串相关工具类
  */
@@ -39,7 +42,17 @@ public class StringUtil {
      * @return {@code true}: 空<br> {@code false}: 不为空
      */
     public static boolean isEmpty(CharSequence s) {
-        return s == null || s.length() == 0;
+        return s == null || s.length() == 0 || s.equals("");
+    }
+
+    /**
+     * 是否为空
+     *
+     * @param str 字符串
+     * @return true 空 false 非空
+     */
+    public static Boolean isEmpty(String str) {
+        return str == null || str.length() == 0 || str.equals("");
     }
 
     /**
@@ -188,5 +201,16 @@ public class StringUtil {
             }
         }
         return new String(chars);
+    }
+
+    public static String getFormattedDateTime(long timestamp, String formatStr) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat(formatStr);
+            Date date = new Date(timestamp);
+            return format.format(date.getTime());
+        } catch (Exception e) {
+            LogUtil.e(e.toString());
+        }
+        return "";
     }
 }

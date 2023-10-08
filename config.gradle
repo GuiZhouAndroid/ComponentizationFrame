@@ -39,9 +39,9 @@ def ali_router_version = '1.5.2'
 project.ext {
 
     // 切换继承与组件模式,是否是模块化模式
-    // 集成模式 true ( 默认模式 , 模块化 )
-    // 组件模式 false ( 组件化 )
-    isModuleMode = true
+    // 组件模式 true
+    // 集成模式 false
+    isModuleMode = false
 
     // 定义 android 变量 , 类型是字典 Map 集合
     // 其中定义了若干键值对集合

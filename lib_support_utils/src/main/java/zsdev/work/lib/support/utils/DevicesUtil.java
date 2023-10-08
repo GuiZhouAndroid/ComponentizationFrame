@@ -1,19 +1,14 @@
 package zsdev.work.lib.support.utils;
 
 import android.content.Context;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Environment;
+import android.os.StatFs;
 import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
 
 import java.io.File;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Enumeration;
 
 /**
  * Created: by 2023-08-08 01:22
@@ -22,115 +17,172 @@ import java.util.Enumeration;
  */
 public class DevicesUtil {
 
-    private DevicesUtil() {
-        throw new UnsupportedOperationException("不能实例化");
+    /**
+     * 获取设备密度
+     *
+     * @param context 全局context
+     * @return 设备dpi
+     */
+    public static int getDeviceDpi(Context context) {
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        return dm.densityDpi;
     }
 
     /**
-     * 获取系统版本
+     * 获取设备宽 高 单位像素
      *
-     * @return
+     * @param context 全局context
+     * @return int[]
+     * [0] 设备宽(像素)
+     * [1] 设备高(像素)
      */
-    public static String getSystemVersion() {
-        return Build.VERSION.RELEASE;
+    public static int[] getDeviceSize(Context context) {
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        return new int[]{dm.widthPixels, dm.heightPixels};
     }
 
     /**
-     * 获取设备型号
+     * 根据手机的分辨率从从dp转成为px(像素)
      *
-     * @return
+     * @param context 全局context
+     * @param dpValue dp值
+     * @return px像素值
      */
-    public static String getDevicesModel() {
-        return Build.MODEL;
+    public static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 
     /**
-     * 获取设备ID
+     * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
      *
-     * @return
+     * @param context 全局context
+     * @param pxValue px像素值
+     * @return dp值
      */
-    public static String getDevicesId(Context context) {
-        TelephonyManager telephonyManager = (TelephonyManager) context
-                .getSystemService(context.TELEPHONY_SERVICE);
-        return telephonyManager.getDeviceId();
+    public static int px2dip(Context context, float pxValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (pxValue / scale + 0.5f);
     }
 
     /**
-     * 获取当前时间
+     * 获取手机设备id 需要READ_PHONE_STATE权限
      *
-     * @return
+     * @param context 全局context
+     * @return device id
      */
-    public static long getCurrentTime() {
-        return System.currentTimeMillis();
+    public static String getDeviceId(Context context) {
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        return tm.getDeviceId();
     }
 
     /**
-     * 获取日期
+     * 获取手机sim卡id 需要READ_PHONE_STATE权限
      *
-     * @return
+     * @param context 全局context
+     * @return sim id
      */
-    public static String getDate() {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        Date curDate = new Date(System.currentTimeMillis());
-        return formatter.format(curDate);
+    public static String getSubscriberId(Context context) {
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        return tm.getSubscriberId();
     }
 
     /**
-     * 获取 SD 卡路径
+     * 判断是否平板设备
      *
-     * @param context
-     * @param paramString
-     * @return
+     * @param context 全局context
+     * @return true:平板,false:手机
      */
-    public static String getSDCacheDir(Context context, String paramString) {
-        String absoultePath = "";
-        if ("mounted".equals(Environment.getExternalStorageState()))
-            absoultePath = Environment.getExternalStorageDirectory().getAbsolutePath();
-        if (absoultePath == null) {
-            File cacheDir = context.getCacheDir();
-            if (cacheDir != null) {
-                if (cacheDir.exists())
-                    absoultePath = cacheDir.getPath();
-            }
+    public static boolean isTabletDevice(Context context) {
+        return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >=
+                Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
+
+    /**
+     * 判断sd卡是否存在
+     *
+     * @return true:存在；false：不存在
+     */
+    public static boolean isSdcardExisting() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        } else {
+            return false;
         }
-        return absoultePath + File.separator + paramString;
     }
 
     /**
-     * 获取mac地址
+     * 获取手机内部存储剩余空间 单位byte
      *
-     * @param context
      * @return
      */
-    public static String getMacAddress(Context context) {
-        WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        WifiInfo info = wifi.getConnectionInfo();
-        String mac = info.getMacAddress();
-        return mac;
-    }
+    @SuppressWarnings("deprecation")
+    public static long getAvailableInternalStorageSize() {
+        File path = Environment.getDataDirectory();
+        StatFs stat = new StatFs(path.getPath());
 
-    /**
-     * 获取设备IP
-     *
-     * @return
-     */
-    public static String getDevicesIp() {
-        try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en
-                    .hasMoreElements(); ) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr
-                        .hasMoreElements(); ) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress()) {
-                        return inetAddress.getHostAddress().toString();
-                    }
-                }
-            }
-        } catch (SocketException ex) {
-            ex.printStackTrace();
+        if (Build.VERSION.SDK_INT >= 18) {
+            return stat.getAvailableBytes();
+        } else {
+            return (long) stat.getAvailableBlocks() * stat.getBlockSize();
         }
-        return null;
     }
 
+    /**
+     * 获取手机内部总存储空间 单位byte
+     *
+     * @return
+     */
+    @SuppressWarnings("deprecation")
+    public static long getTotalInternalStorageSize() {
+        File path = Environment.getDataDirectory();
+        StatFs stat = new StatFs(path.getPath());
+
+        if (Build.VERSION.SDK_INT >= 18) {
+            return stat.getTotalBytes();
+        } else {
+            return (long) stat.getBlockCount() * stat.getBlockSize();
+        }
+    }
+
+    /**
+     * 获取SDCARD剩余存储空间 单位byte
+     *
+     * @return
+     */
+    public static long getAvailableExternalStorageSize() {
+        if (isSdcardExisting()) {
+            File path = Environment.getExternalStorageDirectory();
+            StatFs stat = new StatFs(path.getPath());
+
+            if (Build.VERSION.SDK_INT >= 18) {
+                return stat.getAvailableBytes();
+            } else {
+                return (long) stat.getAvailableBlocks() * stat.getBlockSize();
+            }
+        } else {
+            return 0L;
+        }
+    }
+
+    /**
+     * 获取SDCARD总的存储空间 单位byte
+     *
+     * @return
+     */
+    public static long getTotalExternalStorageSize() {
+        if (isSdcardExisting()) {
+            File path = Environment.getExternalStorageDirectory();
+            StatFs stat = new StatFs(path.getPath());
+
+            if (Build.VERSION.SDK_INT >= 18) {
+                return stat.getTotalBytes();
+            } else {
+                return (long) stat.getBlockCount() * stat.getBlockSize();
+            }
+        } else {
+            return 0;
+        }
+    }
 }

@@ -5,7 +5,6 @@ import androidx.lifecycle.LifecycleOwner;
 import autodispose2.AutoDispose;
 import autodispose2.AutoDisposeConverter;
 import autodispose2.androidx.lifecycle.AndroidLifecycleScopeProvider;
-import zsdev.work.lib.support.utils.LogUtil;
 
 
 /**

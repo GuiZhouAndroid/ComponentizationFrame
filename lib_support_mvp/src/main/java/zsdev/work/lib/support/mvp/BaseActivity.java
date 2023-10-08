@@ -22,6 +22,7 @@ import zsdev.work.lib.support.swipeback.SwipeBackActivity;
 import zsdev.work.lib.support.swipeback.SwipeBackLayout;
 import zsdev.work.lib.support.utils.ImmersiveUtil;
 import zsdev.work.lib.support.utils.LogUtil;
+import zsdev.work.lib.support.utils.ToastUtil;
 import zsdev.work.lib.support.utils.network.newnet.NetworkLiveDataMBefore;
 import zsdev.work.lib.support.utils.network.newnet.NetworkState;
 
@@ -343,22 +344,59 @@ public abstract class BaseActivity extends SwipeBackActivity implements IActivit
         }
     }
 
+
     /**
-     * Toast消息提示  字符
+     * 短显示：Toast消息提示
      *
-     * @param llw
+     * @param charSequence 字符文本
      */
-    protected void showMsg(CharSequence llw) {
-        Toast.makeText(getActivity(), llw, Toast.LENGTH_SHORT).show();
+    protected void shortShowMsg(CharSequence charSequence) {
+        ToastUtil.showShort(getActivity(), charSequence);
     }
 
     /**
-     * Toast消息提示  资源ID
+     * 短显示：Toast消息提示  字符
      *
-     * @param resourceId
+     * @param msg 字符文本
      */
-    protected void showMsg(int resourceId) {
-        Toast.makeText(getActivity(), resourceId, Toast.LENGTH_SHORT).show();
+    protected void shortShowMsg(String msg) {
+        ToastUtil.showShort(getActivity(), msg);
+    }
+
+    /**
+     * 短显示：Toast消息提示
+     *
+     * @param resourceId 资源ID
+     */
+    protected void shortShowMsg(int resourceId) {
+        ToastUtil.showShort(getActivity(), resourceId);
+    }
+
+    /**
+     * 长显示：Toast消息提示
+     *
+     * @param charSequence 字符文本
+     */
+    protected void longShowMsg(CharSequence charSequence) {
+        ToastUtil.showLong(getActivity(), charSequence);
+    }
+
+    /**
+     * 长显示：Toast消息提示  字符
+     *
+     * @param msg 字符文本
+     */
+    protected void longShowMsg(String msg) {
+        ToastUtil.showLong(getActivity(), msg);
+    }
+
+    /**
+     * 长显示：Toast消息提示
+     *
+     * @param resourceId 资源ID
+     */
+    protected void longShowMsg(int resourceId) {
+        ToastUtil.showLong(getActivity(), resourceId);
     }
 
     /**

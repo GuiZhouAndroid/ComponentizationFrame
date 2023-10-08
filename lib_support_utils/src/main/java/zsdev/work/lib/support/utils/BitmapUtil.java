@@ -1,27 +1,12 @@
 package zsdev.work.lib.support.utils;
 
-import android.content.Intent;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Build;
-import android.provider.MediaStore;
-import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-
+import java.io.InputStream;
 
 
 /**
@@ -31,224 +16,125 @@ import java.io.IOException;
  */
 public class BitmapUtil {
 
-    /**
-     * convert Bitmap to byte array
-     */
-    public static byte[] bitmapToByte(Bitmap b) {
-        ByteArrayOutputStream o = new ByteArrayOutputStream();
-        b.compress(Bitmap.CompressFormat.PNG, 100, o);
-        return o.toByteArray();
-    }
+    private static final String TAG = "BitmapUtil";
 
     /**
-     * convert byte array to Bitmap
+     * RGB_565方式读取资源到Bitmap
+     *
+     * @param context 全局context
+     * @param resId   资源id
+     * @return bitmap
      */
-    public static Bitmap byteToBitmap(byte[] b) {
-        return (b == null || b.length == 0) ? null : BitmapFactory.decodeByteArray(b, 0, b.length);
-    }
-
-    /**
-     * 把bitmap转换成Base64编码String
-     */
-    public static String bitmapToString(Bitmap bitmap) {
-        return Base64.encodeToString(bitmapToByte(bitmap), Base64.DEFAULT);
+    public static Bitmap readBitMap(Context context, int resId) {
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        opt.inPreferredConfig = Bitmap.Config.RGB_565;
+        opt.inPurgeable = true;
+        opt.inInputShareable = true;
+        InputStream is = context.getResources().openRawResource(resId);
+        return BitmapFactory.decodeStream(is, null, opt);
     }
 
     /**
-     * convert Drawable to Bitmap
+     * RGB_565方式读取资源到Bitmap
+     *
+     * @param path 文件图片路径
+     * @return bitmap
      */
-    public static Bitmap drawableToBitmap(Drawable drawable) {
-        return drawable == null ? null : ((BitmapDrawable) drawable).getBitmap();
+    public static Bitmap readBitMap(String path) {
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        opt.inPreferredConfig = Bitmap.Config.RGB_565;
+        opt.inPurgeable = true;
+        opt.inInputShareable = true;
+        return BitmapFactory.decodeFile(path, opt);
     }
 
     /**
-     * convert Bitmap to Drawable
+     * Bitmap 转 byte[]
+     *
+     * @param bitmap 待转bitmap
+     * @return 成功-byte[] 失败-null
      */
-    public static Drawable bitmapToDrawable(Bitmap bitmap) {
-        return bitmap == null ? null : new BitmapDrawable(bitmap);
-    }
-
-    /**
-     * scale image
-     */
-    public static Bitmap scaleImageTo(Bitmap org, int newWidth, int newHeight) {
-        return scaleImage(org, (float) newWidth / org.getWidth(), (float) newHeight / org.getHeight());
-    }
-
-    /**
-     * scale image
-     */
-    public static Bitmap scaleImage(Bitmap org, float scaleWidth, float scaleHeight) {
-        if (org == null) {
-            return null;
-        }
-        Matrix matrix = new Matrix();
-        matrix.postScale(scaleWidth, scaleHeight);
-        return Bitmap.createBitmap(org, 0, 0, org.getWidth(), org.getHeight(), matrix, true);
-    }
-
-    public static Bitmap toRoundCorner(Bitmap bitmap) {
-        int height = bitmap.getHeight();
-        int width = bitmap.getHeight();
-        Bitmap output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-
-        Canvas canvas = new Canvas(output);
-
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, width, height);
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        //paint.setColor(0xff424242);
-        paint.setColor(Color.TRANSPARENT);
-        canvas.drawCircle(width / 2, height / 2, width / 2, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-        return output;
-    }
-
-    public static Bitmap createBitmapThumbnail(Bitmap bitMap, boolean needRecycle, int newHeight, int newWidth) {
-        int width = bitMap.getWidth();
-        int height = bitMap.getHeight();
-        // 计算缩放比例
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        // 取得想要缩放的matrix参数
-        Matrix matrix = new Matrix();
-        matrix.postScale(scaleWidth, scaleHeight);
-        // 得到新的图片
-        Bitmap newBitMap = Bitmap.createBitmap(bitMap, 0, 0, width, height, matrix, true);
-        if (needRecycle)
-            bitMap.recycle();
-        return newBitMap;
-    }
-
-    public static boolean saveBitmap(Bitmap bitmap, File file) {
-        if (bitmap == null)
-            return false;
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            fos.flush();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (fos != null) {
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+    public static byte[] bitmap2Bytes(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = null;
+        if (bitmap != null && !bitmap.isRecycled()) {
+            try {
+                byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                if (byteArrayOutputStream.toByteArray() == null) {
+                    LogUtil.e(TAG, "bitmap2Bytes byteArrayOutputStream toByteArray=null");
+                }
+                return byteArrayOutputStream.toByteArray();
+            } catch (Exception e) {
+                LogUtil.e(TAG, "bitmap2Bytes exception", e);
+            } finally {
+                if (byteArrayOutputStream != null) {
+                    try {
+                        byteArrayOutputStream.close();
+                    } catch (IOException var14) {
+                        ;
+                    }
                 }
             }
-        }
-        return false;
-    }
 
-    public static boolean saveBitmap(Bitmap bitmap, String absPath) {
-        return saveBitmap(bitmap, new File(absPath));
-    }
-
-    public static Intent buildImageGetIntent(Uri saveTo, int outputX, int outputY, boolean returnData) {
-        return buildImageGetIntent(saveTo, 1, 1, outputX, outputY, returnData);
-    }
-
-    public static Intent buildImageGetIntent(Uri saveTo, int aspectX, int aspectY,
-                                             int outputX, int outputY, boolean returnData) {
-        LogUtil.i("Build.VERSION.SDK_INT : " + Build.VERSION.SDK_INT);
-        Intent intent = new Intent();
-        if (Build.VERSION.SDK_INT < 19) {
-            intent.setAction(Intent.ACTION_GET_CONTENT);
+            return null;
         } else {
-            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            LogUtil.e(TAG, "bitmap2Bytes bitmap == null or bitmap.isRecycled()");
+            return null;
         }
-        intent.setType("image/*");
-        intent.putExtra("output", saveTo);
-        intent.putExtra("aspectX", aspectX);
-        intent.putExtra("aspectY", aspectY);
-        intent.putExtra("outputX", outputX);
-        intent.putExtra("outputY", outputY);
-        intent.putExtra("scale", true);
-        intent.putExtra("return-data", returnData);
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
-        return intent;
     }
 
-    public static Intent buildImageCropIntent(Uri uriFrom, Uri uriTo, int outputX, int outputY, boolean returnData) {
-        return buildImageCropIntent(uriFrom, uriTo, 1, 1, outputX, outputY, returnData);
-    }
+    /**
+     * 压缩图片到指定byte大小 (在保证质量的情况下尽可能压缩 不保证压缩到指定字节)
+     *
+     * @param datas     图片byte格式
+     * @param byteCount 指定压缩到字节数
+     * @return 压缩后的byte[] (不保证压缩到指定字节)
+     */
+    public static byte[] compressBitmap(byte[] datas, int byteCount) {
+        boolean isFinish = false;
+        if (datas != null && datas.length > byteCount) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            Bitmap tmpBitmap = BitmapFactory.decodeByteArray(datas, 0, datas.length);
+            int times = 1;
+            double percentage = 1.0D;
 
-    public static Intent buildImageCropIntent(Uri uriFrom, Uri uriTo, int aspectX, int aspectY,
-                                              int outputX, int outputY, boolean returnData) {
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uriFrom, "image/*");
-        intent.putExtra("crop", "true");
-        intent.putExtra("output", uriTo);
-        intent.putExtra("aspectX", aspectX);
-        intent.putExtra("aspectY", aspectY);
-        intent.putExtra("outputX", outputX);
-        intent.putExtra("outputY", outputY);
-        intent.putExtra("scale", true);
-        intent.putExtra("return-data", returnData);
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
-        return intent;
-    }
+            while (!isFinish && times <= 10) {
+                outputStream.reset();
+                percentage = Math.pow(0.8D, (double) times);
+                int compress_datas = (int) (100.0D * percentage);
+                tmpBitmap.compress(Bitmap.CompressFormat.JPEG, compress_datas, outputStream);
+                if (outputStream != null && outputStream.size() < byteCount) {
+                    isFinish = true;
+                } else {
+                    ++times;
+                }
+            }
 
-    public static Intent buildImageCaptureIntent(Uri uri) {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-        return intent;
-    }
+            if (outputStream != null) {
+                byte[] outputStreamByte = outputStream.toByteArray();
+                if (!tmpBitmap.isRecycled()) {
+                    tmpBitmap.recycle();
+                }
 
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        int h = options.outHeight;
-        int w = options.outWidth;
-        int inSampleSize = 0;
-        if (h > reqHeight || w > reqWidth) {
-            float ratioW = (float) w / reqWidth;
-            float ratioH = (float) h / reqHeight;
-            inSampleSize = (int) Math.min(ratioH, ratioW);
+                if (outputStreamByte.length > byteCount) {
+                    LogUtil.w(TAG, "compressBitmap cannot compress to " + byteCount + ", after compress size=" + outputStreamByte.length);
+                }
+
+                return outputStreamByte;
+            }
         }
-        inSampleSize = Math.max(1, inSampleSize);
-        return inSampleSize;
+
+        return datas;
     }
 
-    public static Bitmap getSmallBitmap(String filePath, int reqWidth, int reqHeight) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(filePath, options);
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(filePath, options);
-    }
-
-    public byte[] compressBitmapToBytes(String filePath, int reqWidth, int reqHeight, int quality) {
-        Bitmap bitmap = getSmallBitmap(filePath, reqWidth, reqHeight);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
-        byte[] bytes = baos.toByteArray();
-        bitmap.recycle();
-        LogUtil.i("位图压缩成功，大小= " + bytes.length);
-        return bytes;
-    }
-
-    public byte[] compressBitmapSmallTo(String filePath, int reqWidth, int reqHeight, int maxLenth) {
-        int quality = 100;
-        byte[] bytes = compressBitmapToBytes(filePath, reqWidth, reqHeight, quality);
-        while (bytes.length > maxLenth && quality > 0) {
-            quality = quality / 2;
-            bytes = compressBitmapToBytes(filePath, reqWidth, reqHeight, quality);
-        }
-        return bytes;
-    }
-
-    public byte[] compressBitmapQuikly(String filePath) {
-        return compressBitmapToBytes(filePath, 480, 800, 50);
-    }
-
-    public byte[] compressBitmapQuiklySmallTo(String filePath, int maxLenth) {
-        return compressBitmapSmallTo(filePath, 480, 800, maxLenth);
+    /**
+     * 压缩图片到指定byte大小 (在保证质量的情况下尽可能压缩 不保证压缩到指定字节)
+     *
+     * @param bitmap    图片
+     * @param byteCount 指定压缩到字节数
+     * @return 压缩后的byte[] (不保证压缩到指定字节)
+     */
+    public static byte[] compressBitmap(Bitmap bitmap, int byteCount) {
+        return compressBitmap(bitmap2Bytes(bitmap), byteCount);
     }
 }

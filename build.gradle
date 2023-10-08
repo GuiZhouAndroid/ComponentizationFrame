@@ -23,8 +23,3 @@ plugins {
 
 //引用项目根目录自定义配置文件中全局配置参数的内容导入到该位置
 apply from: "config.gradle"
-
-// 组件缓存更新时间设置（默认每次build都更新）
-configurations.configureEach {
-    resolutionStrategy.cacheChangingModulesFor 0, 'minutes'
-}
