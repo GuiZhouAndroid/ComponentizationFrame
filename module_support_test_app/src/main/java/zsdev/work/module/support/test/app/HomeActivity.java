@@ -6,7 +6,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import zsdev.work.lib.support.mvp.base.BaseActivity;
+import zsdev.work.lib.support.mvp.BaseActivity;
 
 
 /**

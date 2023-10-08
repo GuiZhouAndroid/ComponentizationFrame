@@ -2,8 +2,9 @@ package com.zhangsong.fgstore;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 
-import zsdev.work.lib.support.mvp.base.BaseApplication;
+import zsdev.work.lib.support.mvp.BaseApplication;
 import zsdev.work.lib.support.utils.InitUtil;
+
 
 /**
  * Created: by 2023-10-07 22:26

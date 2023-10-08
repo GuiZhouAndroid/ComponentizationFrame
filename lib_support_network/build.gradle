@@ -32,12 +32,12 @@ android {
 dependencies {
 
     //弹窗
-    implementation(project(':lib_support_dialog'))
+    implementation(dep["my-lib-dialog"])
+    //工具类库
+    implementation(dep["my-lib-utils"])
 
     //androidx
     implementation(dep["appcompat"])
-
-    //material
     implementation(dep["material"])
 
     //gson

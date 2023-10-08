@@ -44,8 +44,8 @@ android {
 }
 
 dependencies {
+    implementation(project(':lib_frame_core'))
     //组件模式仅依赖公共库
-    implementation(project(':lib_support_all_core'))
     //集成模式依赖所有module业务组件
     if (!isModuleMode) {
         implementation(project(':module_business_main'))

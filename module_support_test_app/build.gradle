@@ -19,6 +19,7 @@ android {
         targetSdk app["targetSdk"]
         versionCode app["versionCode"]
         versionName app["versionName"]
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -40,6 +41,6 @@ android {
 }
 
 dependencies {
-    //框架资源库
-    implementation project(':lib_support_all_core')
+    implementation project(':lib_frame_core')
 }
+

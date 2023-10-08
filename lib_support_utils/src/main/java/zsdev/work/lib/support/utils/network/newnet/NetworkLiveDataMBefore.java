@@ -10,6 +10,8 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
+import zsdev.work.lib.support.utils.LogUtil;
+
 /**
  * Created: by 2023-09-25 13:04
  * Description: Android 23 6.0以下 观察网络状态变化
@@ -30,7 +32,7 @@ public class NetworkLiveDataMBefore extends LiveData<NetworkState> {
 
     public static NetworkLiveDataMBefore getInstance(Context context) {
         if (mNetworkLiveData == null) {
-            Log.i("NetworkLiveDataMBefore", "getInstance：sdk小于23");
+            LogUtil.i("NetworkLiveDataMBefore", "getInstance：sdk小于23");
             mNetworkLiveData = new NetworkLiveDataMBefore(context);
         }
         return mNetworkLiveData;
@@ -45,7 +47,7 @@ public class NetworkLiveDataMBefore extends LiveData<NetworkState> {
     @Override
     protected void onActive() {
         super.onActive();
-        Log.i("NetworkLiveDataMBefore", "onActive：注册监听网络变化的广播");
+        LogUtil.i("NetworkLiveDataMBefore", "onActive：注册监听网络变化的广播");
         mContext.registerReceiver(mNetworkReceiver, mIntentFilter);
     }
 
@@ -58,7 +60,7 @@ public class NetworkLiveDataMBefore extends LiveData<NetworkState> {
     @Override
     protected void onInactive() {
         super.onInactive();
-        Log.i("NetworkLiveDataMBefore", "onInactive：注销网络监听广播");
+        LogUtil.i("NetworkLiveDataMBefore", "onInactive：注销网络监听广播");
         mContext.unregisterReceiver(mNetworkReceiver);
     }
 
@@ -74,11 +76,11 @@ public class NetworkLiveDataMBefore extends LiveData<NetworkState> {
                 switch (networkInfo.getType()) {
                     case ConnectivityManager.TYPE_MOBILE:
                         getInstance(context).postValue(NetworkState.MOBILE);
-                        Log.i("NetworkLiveDataMBefore", "onReceive：sdk小于23 蜂窝网络>>>>>>>>");
+                        LogUtil.i("NetworkLiveDataMBefore", "onReceive：sdk小于23 蜂窝网络>>>>>>>>");
                         break;
                     case ConnectivityManager.TYPE_WIFI:
                         getInstance(context).postValue(NetworkState.WIFI);
-                        Log.i("NetworkLiveDataMBefore", "onReceive：sdk小于23 wifi>>>>>>>>");
+                        LogUtil.i("NetworkLiveDataMBefore", "onReceive：sdk小于23 wifi>>>>>>>>");
                         break;
                     default:
                         getInstance(context).postValue(NetworkState.NOT_NETWORK_CHECK);
@@ -86,7 +88,7 @@ public class NetworkLiveDataMBefore extends LiveData<NetworkState> {
                 }
             } else {
                 getInstance(context).postValue(NetworkState.NOT_NETWORK_CHECK);
-                Log.i("NetworkLiveDataMBefore", "onReceive：sdk小于23 网络断开>>>>>>>>");
+                LogUtil.i("NetworkLiveDataMBefore", "onReceive：sdk小于23 网络断开>>>>>>>>");
             }
         }
     }

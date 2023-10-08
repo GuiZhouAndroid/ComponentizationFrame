@@ -21,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import okhttp3.Cookie;
 import okhttp3.HttpUrl;
+import zsdev.work.lib.support.utils.LogUtil;
 
 /**
  * Created: by 2023-08-17 14:29
@@ -167,7 +168,7 @@ public class SpCookieStore implements CookieStore {
                 if (isCookieExpired(cookie)) {
                     //已过期执行移除
                     boolean removeResult = removeCookieByHttpUrl(url, cookie);
-                    Log.i("SpStorageCookie", "getCookieByHttpUrl: " + (removeResult
+                    LogUtil.i("SpStorageCookie", "getCookieByHttpUrl: " + (removeResult
                             ? ("Cookie：" + cookie + "已过期，系统自动删除")
                             : ("Cookie：" + cookie + "未过期"))
                     );

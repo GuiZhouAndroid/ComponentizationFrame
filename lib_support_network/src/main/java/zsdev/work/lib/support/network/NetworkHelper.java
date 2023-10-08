@@ -2,7 +2,6 @@ package zsdev.work.lib.support.network;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.io.File;
 import java.util.HashMap;
@@ -36,6 +35,7 @@ import zsdev.work.lib.support.network.interceptor.HeadersInterceptor;
 import zsdev.work.lib.support.network.interceptor.InterceptorHandler;
 import zsdev.work.lib.support.network.interceptor.InterceptorImpl;
 import zsdev.work.lib.support.network.interceptor.UrlParameterInterceptor;
+import zsdev.work.lib.support.utils.LogUtil;
 
 
 /**
@@ -243,16 +243,16 @@ public class NetworkHelper {
 
         //判断本次请求的服务器URL在Map集合中是否已注册有网络配置，如果已注册就将此含有配置属性的Retrofit对象返回使用
         if (getRetrofitMap().get(baseUrl) != null) {
-            Log.i("NetworkHelper", "getRetrofit: " + baseUrl + "——>Retrofit已存在创建，正在引用中..");
+            LogUtil.i("NetworkHelper", "getRetrofit: " + baseUrl + "——>Retrofit已存在创建，正在引用中..");
             return getRetrofitMap().get(baseUrl);
         } else {
-            Log.i("NetworkHelper", "getRetrofit: " + baseUrl + "——>Retrofit未创建");
+            LogUtil.i("NetworkHelper", "getRetrofit: " + baseUrl + "——>Retrofit未创建");
         }
 
         //此处是使用全局网络配置、单个网络配置的关键之处
         if (netWorkConfig == null) {   //netWorkConfig == null 意味着调用getRetrofit()时未使用参数传递注册
 
-            Log.i("NetworkHelper", "getRetrofit: " + baseUrl + "当前未使用参数传递注册网络配置");
+            LogUtil.i("NetworkHelper", "getRetrofit: " + baseUrl + "当前未使用参数传递注册网络配置");
 
             //先根据请求的服务器URL在Map集合中查是否已存在注册网络配置，如果已注册网络配置直接赋值给netWorkConfig变量提供后续使用
             netWorkConfig = getNetWorkSingleConfigMap().get(baseUrl);
@@ -260,21 +260,21 @@ public class NetworkHelper {
             //如果未注册网络配置情况去赋值给netWorkConfig变量就为null
             if (netWorkConfig == null) {
 
-                Log.i("NetworkHelper", "getRetrofit: " + baseUrl + "当前使用全局网络配置");
+                LogUtil.i("NetworkHelper", "getRetrofit: " + baseUrl + "当前使用全局网络配置");
                 //为null就引用全局网络配置
                 netWorkConfig = getNetWorkGlobalConfig();
 
             } else {
-                Log.i("NetworkHelper", "getRetrofit: " + baseUrl + "当前使用单次网络配置");
+                LogUtil.i("NetworkHelper", "getRetrofit: " + baseUrl + "当前使用单次网络配置");
             }
         } else {
-            Log.i("NetworkHelper", "getRetrofit: " + baseUrl + "当前已使用参数传递注册网络配置");
+            LogUtil.i("NetworkHelper", "getRetrofit: " + baseUrl + "当前已使用参数传递注册网络配置");
         }
 
         //对引用网络配置判空校验，未注册配置程序关闭打印异常，反知继续下一步
         checkNetWorkConfig(baseUrl, netWorkConfig);
 
-        Log.i("NetworkHelper", "getRetrofit: " + baseUrl + "成功引用网络配置");
+        LogUtil.i("NetworkHelper", "getRetrofit: " + baseUrl + "成功引用网络配置");
 
         //将接口传递来的网络配置参数装载Retrofit，生成Service
         if (mRetrofit == null) {
@@ -284,12 +284,12 @@ public class NetworkHelper {
                     .client(getHttpClient(context, baseUrl, netWorkConfig, isEnableCookieStore));//设置使用okhttp网络请求，加载Okhttp已配置的网络参数
             //设置实体转换器模式
             if (!isEnableConverterFactory) {
-                Log.i("NetworkHelper", "getRetrofit: Current not using converter factory state!" +
+                LogUtil.i("NetworkHelper", "getRetrofit: Current not using converter factory state!" +
                         " will could not locate ResponseBody converter for bean!" +
                         "If you do not use converter factory, please set the Retrofit service interface " +
                         "Change the return value type to ResponseBody, and then you can only manually complete data parsing and usage!");
             } else {
-                Log.i("NetworkHelper", "getRetrofit: Current yes using converter factory state!");
+                LogUtil.i("NetworkHelper", "getRetrofit: Current yes using converter factory state!");
                 //开启实体转换器必须设置模式
                 if (netWorkConfig.setConverterFactoryMode() == null) {
                     throw new IllegalStateException("converter factory mode can not be null!");
@@ -298,49 +298,49 @@ public class NetworkHelper {
                 switch (netWorkConfig.setConverterFactoryMode()) {
                     case GSON:
                         builder.addConverterFactory(GsonConverterFactory.create());
-                        Log.i("NetworkHelper", "getRetrofit: 使用Gson转换器");
+                        LogUtil.i("NetworkHelper", "getRetrofit: 使用Gson转换器");
                         break;
                     case JACKSON:
                         builder.addConverterFactory(JacksonConverterFactory.create());
-                        Log.i("NetworkHelper", "getRetrofit: 使用jackson转换器");
+                        LogUtil.i("NetworkHelper", "getRetrofit: 使用jackson转换器");
                         break;
                     case SCALARS:
                         builder.addConverterFactory(ScalarsConverterFactory.create());
-                        Log.i("NetworkHelper", "getRetrofit: 使用scalars转换器");
+                        LogUtil.i("NetworkHelper", "getRetrofit: 使用scalars转换器");
                         break;
                     case MOSHI:
                         builder.addConverterFactory(MoshiConverterFactory.create());
-                        Log.i("NetworkHelper", "getRetrofit: 使用moshi转换器");
+                        LogUtil.i("NetworkHelper", "getRetrofit: 使用moshi转换器");
                         break;
                     case SIMPLE_XML:
                         builder.addConverterFactory(SimpleXmlConverterFactory.create());
-                        Log.i("NetworkHelper", "getRetrofit: 使用simplexml转换器");
+                        LogUtil.i("NetworkHelper", "getRetrofit: 使用simplexml转换器");
                         break;
                     case WIRE:
                         builder.addConverterFactory(WireConverterFactory.create());
-                        Log.i("NetworkHelper", "getRetrofit: 使用wire转换器");
+                        LogUtil.i("NetworkHelper", "getRetrofit: 使用wire转换器");
                         break;
                     case PROTOCOL_BUFFERS:
                         builder.addConverterFactory(ProtoConverterFactory.create());
-                        Log.i("NetworkHelper", "getRetrofit: 使用protobuf转换器");
+                        LogUtil.i("NetworkHelper", "getRetrofit: 使用protobuf转换器");
                         break;
                     case JAXB:
                         builder.addConverterFactory(JaxbConverterFactory.create());
-                        Log.i("NetworkHelper", "getRetrofit: 使用jaxb转换器");
+                        LogUtil.i("NetworkHelper", "getRetrofit: 使用jaxb转换器");
                         break;
                     case JAVA8:
                         builder.addConverterFactory(Java8OptionalConverterFactory.create());
-                        Log.i("NetworkHelper", "getRetrofit: 使用java8转换器");
+                        LogUtil.i("NetworkHelper", "getRetrofit: 使用java8转换器");
                         break;
                     case GUAVA:
                         builder.addConverterFactory(GuavaOptionalConverterFactory.create());
-                        Log.i("NetworkHelper", "getRetrofit: 使用guava转换器");
+                        LogUtil.i("NetworkHelper", "getRetrofit: 使用guava转换器");
                         break;
                     case CUSTOM:
                         Converter.Factory factory = netWorkConfig.setCustomConverterFactory();
                         if (factory != null) {
                             builder.addConverterFactory(factory);
-                            Log.i("NetworkHelper", "getRetrofit: 使用定制转换器");
+                            LogUtil.i("NetworkHelper", "getRetrofit: 使用定制转换器");
                         }
                         break;
                 }
@@ -348,11 +348,11 @@ public class NetworkHelper {
 
             //判断是否启用RxJava适配器
             if (!isEnableRxJava) {
-                Log.i("NetworkHelper", "getRetrofit: Current not using rxjava state!");
+                LogUtil.i("NetworkHelper", "getRetrofit: Current not using rxjava state!");
             } else {
                 //添加回调库
                 builder.addCallAdapterFactory(RxJava3CallAdapterFactory.create());
-                Log.i("NetworkHelper", "getRetrofit: Current yes using rxjava state!");
+                LogUtil.i("NetworkHelper", "getRetrofit: Current yes using rxjava state!");
             }
 
             //结束并构建Retrofit对象
@@ -424,7 +424,7 @@ public class NetworkHelper {
         //创建okhttp3日志拦截器实例
         return new HttpLoggingInterceptor(strLogMsg -> {
             //设置打印retrofit日志前缀
-            Log.i("okpLog", strLogMsg);
+            LogUtil.i("okpLog", strLogMsg);
         }).setLevel(HttpLoggingInterceptor.Level.BODY);
     }
 
@@ -443,10 +443,10 @@ public class NetworkHelper {
 
         //判断本次请求的服务器URL在Map集合中是否已注册有Okhttp对象，如果已创建对象返回给Retrofit使用
         if (getOkhttpClientMap().get(baseUrl) != null) {
-            Log.i("NetworkHelper", "getHttpClient: " + baseUrl + "——>OkHttpClient已存在创建，正在引用中..");
+            LogUtil.i("NetworkHelper", "getHttpClient: " + baseUrl + "——>OkHttpClient已存在创建，正在引用中..");
             return getOkhttpClientMap().get(baseUrl);
         } else {
-            Log.i("NetworkHelper", "getHttpClient: " + baseUrl + "——>OkHttpClient未创建");
+            LogUtil.i("NetworkHelper", "getHttpClient: " + baseUrl + "——>OkHttpClient未创建");
         }
 
         //此处需对赋值引用全局配置进行判空校验，无全局网络配置程序关闭打印异常，反知即可进行下一步配置
@@ -471,9 +471,9 @@ public class NetworkHelper {
 
             //设置Cookie存取模式
             if (!isEnableCookieStore) {
-                Log.i("NetworkHelper", "getRetrofit: Current not using cookie store state!");
+                LogUtil.i("NetworkHelper", "getRetrofit: Current not using cookie store state!");
             } else {
-                Log.i("NetworkHelper", "getRetrofit: Current yes using cookie store state!");
+                LogUtil.i("NetworkHelper", "getRetrofit: Current yes using cookie store state!");
                 //开启Cookie存取必须设置模式
                 if (netWorkConfig.setCookieStoreMode() == null) {
                     throw new IllegalStateException("cookie store mode can not be null!");
@@ -482,23 +482,23 @@ public class NetworkHelper {
                 switch (netWorkConfig.setCookieStoreMode()) {
                     case SP:
                         builder.cookieJar(new CookieJarImpl(new SpCookieStore(context)));
-                        Log.i("NetworkHelper", "getHttpClient: 当前Cookie存取模式是SharedPreferences");
+                        LogUtil.i("NetworkHelper", "getHttpClient: 当前Cookie存取模式是SharedPreferences");
                         break;
                     case MEMORY:
                         builder.cookieJar(new CookieJarImpl(new MemoryCookieStore()));
-                        Log.i("NetworkHelper", "getHttpClient: 当前Cookie存取模式是Memory");
+                        LogUtil.i("NetworkHelper", "getHttpClient: 当前Cookie存取模式是Memory");
                         break;
                     case DB:
                         // TODO: 2023/8/31 待完善DB模式存取Cookie
                         builder.cookieJar(new CookieJarImpl(new DBCookieStore()));
-                        Log.i("NetworkHelper", "getHttpClient: 当前Cookie存取模式是DB");
+                        LogUtil.i("NetworkHelper", "getHttpClient: 当前Cookie存取模式是DB");
                         break;
                     case CUSTOM:
                         //自定义
                         CookieJar cookieJar = netWorkConfig.setCustomCookieStore();
                         if (cookieJar != null) {
                             builder.cookieJar(cookieJar);
-                            Log.i("NetworkHelper", "getHttpClient: 当前Cookie存取模式是Custom");
+                            LogUtil.i("NetworkHelper", "getHttpClient: 当前Cookie存取模式是Custom");
                         } else {
                             throw new IllegalStateException("You must first create a class to implement the CookieJar interface of Okhttp before completing the customization of business requirements!");
                         }
@@ -516,7 +516,7 @@ public class NetworkHelper {
                 for (InterceptorHandler interceptorHandler : interceptorHandlers) {
                     //依次配置拦截器到Okhttp中
                     builder.addInterceptor(new InterceptorImpl(interceptorHandler));
-                    Log.i("NetworkHelper", "添加定制拦截器（接口传递方式）：" + interceptorHandler.getClass().getSimpleName());
+                    LogUtil.i("NetworkHelper", "添加定制拦截器（接口传递方式）：" + interceptorHandler.getClass().getSimpleName());
                 }
             }
 
@@ -526,7 +526,7 @@ public class NetworkHelper {
                 for (Interceptor interceptor : interceptors) {
                     //依次配置拦截器到Okhttp中
                     builder.addInterceptor(interceptor);
-                    Log.i("NetworkHelper", "添加定制拦截器（非接口传递方式）：" + interceptor.getClass().getSimpleName());
+                    LogUtil.i("NetworkHelper", "添加定制拦截器（非接口传递方式）：" + interceptor.getClass().getSimpleName());
                 }
             }
 
@@ -534,9 +534,9 @@ public class NetworkHelper {
             //根据APK打包类型(开发版或发布版)判定当前应用程序是否启用日志拦截器打印请求日志。PS：开发版启用打印，发布版禁用打印。
             if (netWorkConfig.setIsEnableOkpDefaultPrintLog()) {
                 builder.addNetworkInterceptor(getHttpLoggingInterceptor());
-                Log.i("NetworkHelper", "已启用Okhttp默认日志打印");
+                LogUtil.i("NetworkHelper", "已启用Okhttp默认日志打印");
             } else {
-                Log.i("NetworkHelper", "未启用Okhttp默认日志打印");
+                LogUtil.i("NetworkHelper", "未启用Okhttp默认日志打印");
             }
 
             //判断是否开启缓存 + 设置缓存时间
@@ -553,9 +553,9 @@ public class NetworkHelper {
                 builder.cache(new Cache(new File(
                         context.getCacheDir().getAbsolutePath(), "MyNetworkCache"), 10 * 1024 * 1024)
                 );
-                Log.i("NetworkHelper", "已启用Okhttp缓存：缓存时间==" + 10 * 1024 * 1024);
+                LogUtil.i("NetworkHelper", "已启用Okhttp缓存：缓存时间==" + 10 * 1024 * 1024);
             } else {
-                Log.i("NetworkHelper", "未启用Okhttp缓存");
+                LogUtil.i("NetworkHelper", "未启用Okhttp缓存");
             }
 
             //开始构建OkhttpClient对象

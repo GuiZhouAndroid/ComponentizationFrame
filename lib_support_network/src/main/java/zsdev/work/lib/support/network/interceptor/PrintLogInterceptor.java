@@ -13,6 +13,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okio.Buffer;
+import zsdev.work.lib.support.utils.LogUtil;
 
 /**
  * Created: by 2023-09-05 23:41
@@ -31,17 +32,17 @@ public class PrintLogInterceptor implements InterceptorHandler {
     @Override
     public Request onBeforeRequest(Request request, Interceptor.Chain chain) {
         //请求URL
-        Log.i("PrintLogInterceptor", "url     =  : " + request.url());
+        LogUtil.i("PrintLogInterceptor", "url     =  : " + request.url());
         //请求方法
-        Log.i("PrintLogInterceptor", "method  =  : " + request.method());
+        LogUtil.i("PrintLogInterceptor", "method  =  : " + request.method());
         //请求头
         Headers headers = request.headers();
-        Log.i("PrintLogInterceptor", "headers =  : " + request.headers());
+        LogUtil.i("PrintLogInterceptor", "headers =  : " + request.headers());
         if (headers.size() > 0) {
             Log.e("PrintLogInterceptor", "headers : " + headers.toString());
         }
         //请求体
-        Log.i("PrintLogInterceptor", "request body    =  : " + request.body());
+        LogUtil.i("PrintLogInterceptor", "request body    =  : " + request.body());
         RequestBody requestBody = request.body();
         if (requestBody != null) {
             MediaType mediaType = requestBody.contentType();

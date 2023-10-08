@@ -20,13 +20,13 @@ android {
 
     defaultConfig {
         if (isModuleMode) {
-            // 组件模式 : 必须配置 applicationId
+            // 组件模式 : 必须配置 applicationId、版本号、版本名
             applicationId appIdConfig["module_business_pay_id"]
+            versionCode app["versionCode"]
+            versionName app["versionName"]
         }
         minSdk app["minSdk"]
         targetSdk app["targetSdk"]
-        versionCode app["versionCode"]
-        versionName app["versionName"]
         multiDexEnabled true
 
         //ARouter路由使用
@@ -62,5 +62,5 @@ android {
 dependencies {
     implementation(fileTree(dir: 'libs', include: ['*.jar']))
     annotationProcessor(dep["arouter-compiler"])
-    implementation(project(':lib_support_all_core'))
+    implementation(project(':lib_frame_core'))
 }

@@ -1,12 +1,11 @@
 package zsdev.work.lib.support.network.rxjava.function;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.functions.Function;
 import zsdev.work.lib.support.network.exception.ExceptionHandle;
+import zsdev.work.lib.support.utils.LogUtil;
 
 
 /**
@@ -24,7 +23,7 @@ public class FlowableErrorFunction<T> implements Function<Throwable, Flowable<T>
      */
     @Override
     public Flowable<T> apply(@NonNull Throwable throwable) {
-        Log.i("ErrorFlowableFunction", "flowable is apply: " + throwable.toString());
+        LogUtil.i("ErrorFlowableFunction", "flowable is apply: " + throwable.toString());
         //自定义异常处理类创建ResponseThrowable(异常,异常码)的对象后调用Error()方法将此对象传递下游使用，也就是在onError(Throwable t)去处理
         return Flowable.error(ExceptionHandle.handleException(throwable));
     }

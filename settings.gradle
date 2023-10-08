@@ -31,19 +31,25 @@ dependencyResolutionManagement {
 rootProject.name = "ComponentizationFrame"
 //指定子项目，声明后会自动执行该构建脚本
 
-//library
-include ':lib_support_resource' //框架核心资源库
+//自制library
 include ':lib_support_utils' //工具库
 include ':lib_support_network' //网络请求库
 include ':lib_support_swipeback' //滑动返回库
 include ':lib_support_mvp' //mvp架构库
 include ':lib_support_dialog' //对话框库
-include ':lib_support_all_core' //框架核心支持库
+include ':lib_support_all_lib' //所有自制aar插件总库（也可在lib_support_all_core中单独依赖aar）
 
-//module
+//框架library
+include ':lib_frame_core' //框架支持库
+include ':lib_frame_resource' //框架资源库
+
+//业务module
 include ':module_business_main' //主页业务
 include ':module_business_pay' //支付业务
 include ':module_business_oneself' //我的业务
 include ':module_business_fgstore_app' //壳工程
-include ':module_support_test_app' //测试框架核心资源库专用module
+
+//测试module
+include ':module_support_test_app' //测试框架核心资源库
+
 

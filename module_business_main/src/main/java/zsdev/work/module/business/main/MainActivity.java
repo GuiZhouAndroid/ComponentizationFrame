@@ -2,7 +2,6 @@ package zsdev.work.module.business.main;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -11,9 +10,11 @@ import androidx.core.app.ActivityOptionsCompat;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 
-import zsdev.work.lib.support.all.core.arouter.AliRouterPathManager;
-import zsdev.work.lib.support.all.core.bean.User;
-import zsdev.work.lib.support.mvp.base.BaseActivity;
+import zsdev.work.lib.frame.core.arouter.AliRouterPathManager;
+import zsdev.work.lib.frame.core.bean.User;
+import zsdev.work.lib.support.mvp.BaseActivity;
+import zsdev.work.lib.support.utils.LogUtil;
+
 
 /**
  * Created: by 2023-10-07 21:49
@@ -21,7 +22,6 @@ import zsdev.work.lib.support.mvp.base.BaseActivity;
  * Author: 张松
  */
 public class MainActivity extends BaseActivity {
-
 
     @Override
     public int viewByResIdBindLayout() {
@@ -33,7 +33,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         String stringExtra = getIntent().getStringExtra("组件开发【主页】");
-        Log.i(TAG, "onCreate: " + stringExtra);
+        LogUtil.i(TAG, "onCreate: " + stringExtra);
 
         Button btnOneself = findViewById(R.id.btn_oneself);
         Button btnPay = findViewById(R.id.btn_pay);

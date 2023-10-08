@@ -42,6 +42,8 @@ dependencies {
     //OkHttp3
     implementation(dep["okhttp"])
     implementation(dep["okio"])
-    //Log打印
-    implementation(dep["logger"])
+
+    //AutoDispose：是一种RxJava工具，用于通过处置/取消将RxJava流的执行自动绑定到提供的作用域
+    implementation(dep["autodispose-android"])
+    implementation(dep["autodispose-androidx-lifecycle"])
 }

@@ -1,6 +1,8 @@
 //统一管理版本号：通过相同的方式引入不同版本的依赖库，默认会选择最新版本，不同的方式引入则会产生依赖冲突
 
 //acra日志崩溃记录
+def my_version = '1.0.0-SNAPSHOT'
+//acra日志崩溃记录
 def acraVersion = '4.9.0'
 //protobuf
 def protobuf_java_version = '3.19.3'
@@ -50,6 +52,7 @@ project.ext {
                      "versionCode"      : 1,
                      "versionName"      : "1.0"]
 
+    //applicationId
     applicationIdConfig = [
             "module_business_fgstore_app_id": "com.zhangsong.fgstore",
             "module_business_main_id"       : "zsdev.work.module.business.main",
@@ -58,25 +61,40 @@ project.ext {
             "module_support_test_app_id"    : "zsdev.work.module.support.test.app",
     ]
 
+    //命名空间
     namespaceConfig = [
-            //library
+            //自制library
+            "namespace_lib_support_all_lib"        : 'zsdev.work.lib.support.all.lib',
             "namespace_lib_support_resource"       : 'zsdev.work.lib.support.resource',
-            "namespace_lib_support_all_core"       : 'zsdev.work.lib.support.all.core',
             "namespace_lib_support_dialog"         : 'zsdev.work.lib.support.dialog',
             "namespace_lib_support_mvp"            : 'zsdev.work.lib.support.mvp',
             "namespace_lib_support_network"        : 'zsdev.work.lib.support.network',
             "namespace_lib_support_swipeback"      : 'zsdev.work.lib.support.swipeback',
             "namespace_lib_support_utils"          : "zsdev.work.lib.support.utils",
-            //module
+
+            //框架library
+            "namespace_lib_frame_core"             : 'zsdev.work.lib.frame.core',
+
+            //业务module
             "namespace_module_business_fgstore_app": "com.zhangsong.fgstore",
             "namespace_module_business_main"       : "zsdev.work.module.business.main",
             "namespace_module_business_oneself"    : "zsdev.work.module.business.oneself",
             "namespace_module_business_pay"        : "zsdev.work.module.business.pay",
+
+            //测试module
             "namespace_module_support_test_app"    : "zsdev.work.module.support.test.app",
     ]
 
     // 统一管理依赖库  ${} 表示引用之前定义的变量
     dependenciesConfig = [
+            //自制依赖
+            "my-lib-utils"                  : "work.zsdev:lib-utils:${my_version}",
+            "my-lib-dialog"                 : "work.zsdev:lib-dialog:${my_version}",
+            "my-lib-swipeback"              : "work.zsdev:lib-swipeback:${my_version}",
+            "my-lib-mvp"                    : "work.zsdev:lib-mvp:${my_version}",
+            "my-lib-network"                : "work.zsdev:lib-network:${my_version}",
+            "my-libs-all"                   : "work.zsdev:libs-all:${my_version}",
+
             //日志记录
             "acra"                          : "ch.acra:acra:${acraVersion}",
             "acra-http"                     : "ch.acra:acra-http:${acraVersion}", //网址

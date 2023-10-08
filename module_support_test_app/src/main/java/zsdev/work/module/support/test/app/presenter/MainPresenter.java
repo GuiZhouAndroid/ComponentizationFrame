@@ -1,8 +1,8 @@
 package zsdev.work.module.support.test.app.presenter;
 
 
-import zsdev.work.lib.support.mvp.base.BaseActivity;
-import zsdev.work.lib.support.mvp.base.BasePresenter;
+import zsdev.work.lib.support.mvp.BaseActivity;
+import zsdev.work.lib.support.mvp.BasePresenter;
 import zsdev.work.lib.support.network.base.BaseFlowableSubscriber;
 import zsdev.work.lib.support.network.exception.ResponseThrowable;
 import zsdev.work.lib.support.network.rxjava.transformer.HandlerTransformer;
@@ -58,7 +58,7 @@ public class MainPresenter extends BasePresenter<MainContract.View, MainContract
 //
 //            }
 //        });
-        HandlerTransformer.handlerSubscribe(mainModel.login2(), bindLifecycle(), new BaseFlowableSubscriber<My>(App.getContext(), BaseActivity.getNowActivity(), 9) {
+        HandlerTransformer.handlerSubscribe(mainModel.login2(), bindLifecycle(), new BaseFlowableSubscriber<My>(App.getContext(), BaseActivity.getActivity(), 9) {
 
             @Override
             public void onFail(ResponseThrowable responseThrowable) {

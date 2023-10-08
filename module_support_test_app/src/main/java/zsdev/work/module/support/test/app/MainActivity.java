@@ -1,13 +1,13 @@
 package zsdev.work.module.support.test.app;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import zsdev.work.lib.support.mvp.base.BaseMvpActivity;
+import zsdev.work.lib.support.mvp.BaseMvpActivity;
+import zsdev.work.lib.support.utils.LogUtil;
 import zsdev.work.module.support.test.app.bean.My;
 import zsdev.work.module.support.test.app.contract.MainContract;
 import zsdev.work.module.support.test.app.databinding.ActivityMainBinding;
@@ -53,7 +53,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter, ActivityMainBin
 
     @Override
     public void loginFailure(String message) {
-        Log.i(TAG, "loginFailure: " + message);
+        LogUtil.i(TAG, "loginFailure: " + message);
         showErrorDialog(message);
     }
 

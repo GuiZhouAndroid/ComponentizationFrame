@@ -191,9 +191,9 @@ public class SwipeBackLayout extends FrameLayout {
     /**
      * Enable edge tracking for the selected edges of the parent view. The
      * callback's
-     * {@link zsdev.work.swipeback.ViewDragHelper.Callback#onEdgeTouched(int, int)}
+     * {@link zsdev.work.lib.support.swipeback.ViewDragHelper.Callback#onEdgeTouched(int, int)}
      * and
-     * {@link zsdev.work.swipeback.ViewDragHelper.Callback#onEdgeDragStarted(int, int)}
+     * {@link zsdev.work.lib.support.swipeback.ViewDragHelper.Callback#onEdgeDragStarted(int, int)}
      * methods will only be invoked for edges for which edge tracking has been
      * enabled.
      *

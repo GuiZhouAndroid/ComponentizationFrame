@@ -4,14 +4,14 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
 
 import io.reactivex.rxjava3.subscribers.ResourceSubscriber;
 import zsdev.work.lib.support.dialog.custom.DialogUserCustomView;
 import zsdev.work.lib.support.network.INetworkHandler;
 import zsdev.work.lib.support.network.exception.NetworkError;
 import zsdev.work.lib.support.network.exception.ResponseThrowable;
-import zsdev.work.lib.support.network.utils.NetworkLollipopAfterUtil;
+import zsdev.work.lib.support.utils.LogUtil;
+import zsdev.work.lib.support.utils.network.newnet.NetworkLollipopAfterUtil;
 
 
 /**
@@ -41,7 +41,7 @@ public abstract class BaseFlowableSubscriber<T> extends ResourceSubscriber<T> im
      * @param activity Activity上下文
      */
     public BaseFlowableSubscriber(Context context, Activity activity) {
-        Log.i("BaseFlowableSubscriber", "BaseFlowableNormalSubscriber():" + context.getClass().getSimpleName());
+        LogUtil.i("BaseFlowableSubscriber", "BaseFlowableNormalSubscriber():" + context.getClass().getSimpleName());
         this.context = context;
         dialog = DialogUserCustomView.setFirewoodLoadingDialog(activity);
     }
@@ -54,7 +54,7 @@ public abstract class BaseFlowableSubscriber<T> extends ResourceSubscriber<T> im
      * @param loadingRendererId LoadingRenderer的id
      */
     public BaseFlowableSubscriber(Context context, Activity activity, int loadingRendererId) {
-        Log.i("BaseFlowableSubscriber", "BaseFlowableNormalSubscriber():" + context.getClass().getSimpleName());
+        LogUtil.i("BaseFlowableSubscriber", "BaseFlowableNormalSubscriber():" + context.getClass().getSimpleName());
         this.context = context;
         dialog = DialogUserCustomView.setModeLoadingDialogRendererId(activity, loadingRendererId);
     }
@@ -67,10 +67,10 @@ public abstract class BaseFlowableSubscriber<T> extends ResourceSubscriber<T> im
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i("BaseFlowableSubscriber", "onStart():显示进度条");
+        LogUtil.i("BaseFlowableSubscriber", "onStart():显示进度条");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!NetworkLollipopAfterUtil.isNetAvailable(context)) {
-                Log.i("BaseFlowableSubscriber", "onStart():当前网络不可用，请检查网络情况");
+                LogUtil.i("BaseFlowableSubscriber", "onStart():当前网络不可用，请检查网络情况");
                 // 一定好主动调用下面这一句
                 onComplete();
             }
@@ -90,11 +90,11 @@ public abstract class BaseFlowableSubscriber<T> extends ResourceSubscriber<T> im
     public void onError(Throwable throwable) {
         if (throwable instanceof ResponseThrowable) {
             onFail((ResponseThrowable) throwable);
-            Log.i("BaseFlowableSubscriber", "onError()错误码:" + ((ResponseThrowable) throwable).getCode());
-            Log.i("BaseFlowableSubscriber", "onError()错误原因:" + ((ResponseThrowable) throwable).getMsg());
+            LogUtil.i("BaseFlowableSubscriber", "onError()错误码:" + ((ResponseThrowable) throwable).getCode());
+            LogUtil.i("BaseFlowableSubscriber", "onError()错误原因:" + ((ResponseThrowable) throwable).getMsg());
         } else {
             onFail(new ResponseThrowable(throwable, NetworkError.UNKNOWN));
-            Log.i("BaseFlowableSubscriber", "onError():其他错误");
+            LogUtil.i("BaseFlowableSubscriber", "onError():其他错误");
         }
         //关闭等待框
         if (dialog != null) {
@@ -109,7 +109,7 @@ public abstract class BaseFlowableSubscriber<T> extends ResourceSubscriber<T> im
      */
     @Override
     public void onNext(T t) {
-        Log.i("BaseFlowableSubscriber", "onNext()：" + t.toString());
+        LogUtil.i("BaseFlowableSubscriber", "onNext()：" + t.toString());
         onSuccess(t);
     }
 
@@ -119,7 +119,7 @@ public abstract class BaseFlowableSubscriber<T> extends ResourceSubscriber<T> im
      */
     @Override
     public void onComplete() {
-        Log.i("BaseFlowableSubscriber", "onComplete():关闭等待框");
+        LogUtil.i("BaseFlowableSubscriber", "onComplete():关闭等待框");
         //关闭等待框
         if (dialog != null) {
             dialog.dismiss();

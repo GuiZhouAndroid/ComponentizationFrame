@@ -21,7 +21,7 @@ public class ActivityManagerUtil {
     private ActivityManagerUtil() {
     }
 
-    public static ActivityManagerUtil getScreenManager() {
+    public static ActivityManagerUtil getInstance() {
         if (instance == null) {
             instance = new ActivityManagerUtil();
         }

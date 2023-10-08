@@ -1,0 +1,43 @@
+plugins {
+    id 'com.android.library'
+}
+
+//sonatype平台的maven中央库配置文件
+//发布版
+//apply from: "release-sonatype-publish.gradle"
+//开发版
+apply from: "snapshot-sonatype-publish.gradle"
+
+//config.gradle根目录变量全局
+def app = rootProject.ext.androidConfig
+def appNamespaceConfig = rootProject.ext.namespaceConfig
+def dep = rootProject.ext.dependenciesConfig
+
+android {
+    namespace appNamespaceConfig["namespace_lib_support_all_lib"]
+    compileSdk app["compileSdk"]
+    buildToolsVersion app["buildToolsVersion"]
+
+    defaultConfig {
+        minSdk app["minSdk"]
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    //工具库
+    implementation(dep["my-lib-utils"])
+    //对话框
+    implementation(dep["my-lib-dialog"])
+    //滑动返回
+    implementation(dep["my-lib-swipeback"])
+    //mvp架构
+    implementation(dep["my-lib-mvp"])
+    //网络请求
+    implementation(dep["my-lib-network"])
+}

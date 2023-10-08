@@ -1,0 +1,53 @@
+plugins {
+    id 'com.android.library'
+}
+
+//config.gradle根目录变量全局
+def app = rootProject.ext.androidConfig
+def appNamespaceConfig = rootProject.ext.namespaceConfig
+def dep = rootProject.ext.dependenciesConfig
+
+android {
+    namespace appNamespaceConfig["namespace_lib_frame_core"]
+    compileSdk app["compileSdk"]
+    buildToolsVersion app["buildToolsVersion"]
+
+    defaultConfig {
+        minSdk app["minSdk"]
+        multiDexEnabled true
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    //AS版本支持
+    api platform(dep["protobuf-java"])
+    api platform(dep["kotlin-bom"])
+    //androidx
+    api(dep["appcompat"])
+    api(dep["material"])
+    api(dep["multidex"])
+    //框架资源库
+    api(project(':lib_frame_resource'))
+    //阿里router
+    api(dep["arouter-api"])
+    //自制aar
+    api(dep["my-libs-all"])
+
+    //日志记录
+//    api dep["acra"]
+//    api dep["acra-mail"]
+//    api dep["acra-dialog"]
+//    api dep["acra-toast"]
+//    api dep["acra-notification"]
+//    api dep["acra-limiter"]
+//    api dep["acra-advanced-scheduler"]
+//    api dep["acra-core"]
+
+}

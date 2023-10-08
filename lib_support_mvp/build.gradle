@@ -34,18 +34,16 @@ android {
 }
 
 dependencies {
-
     //自定义对话框
-    implementation(project(':lib_support_dialog'))
+    implementation(dep["my-lib-dialog"])
     //滑动返回
-    implementation(project(':lib_support_swipeback'))
+    implementation(dep["my-lib-swipeback"])
     //工具库
-    implementation(project(':lib_support_utils'))
+    implementation(dep["my-lib-utils"])
 
     //androidx
     implementation(dep["appcompat"])
     compileOnly(dep["multidex"])
-
     //material
     implementation(dep["material"])
 
