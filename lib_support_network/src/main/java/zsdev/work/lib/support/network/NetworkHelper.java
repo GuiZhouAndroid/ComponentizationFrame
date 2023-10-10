@@ -22,7 +22,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.jaxb.JaxbConverterFactory;
 import retrofit2.converter.moshi.MoshiConverterFactory;
-import retrofit2.converter.protobuf.ProtoConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import retrofit2.converter.wire.WireConverterFactory;
@@ -319,10 +318,6 @@ public class NetworkHelper {
                     case WIRE:
                         builder.addConverterFactory(WireConverterFactory.create());
                         LogUtil.i("NetworkHelper", "getRetrofit: 使用wire转换器");
-                        break;
-                    case PROTOCOL_BUFFERS:
-                        builder.addConverterFactory(ProtoConverterFactory.create());
-                        LogUtil.i("NetworkHelper", "getRetrofit: 使用protobuf转换器");
                         break;
                     case JAXB:
                         builder.addConverterFactory(JaxbConverterFactory.create());

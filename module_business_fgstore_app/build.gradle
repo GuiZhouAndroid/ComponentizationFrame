@@ -43,7 +43,13 @@ android {
     }
 }
 
+// 组件缓存更新时间设置（默认每次build都更新）
+configurations.configureEach {
+    resolutionStrategy.cacheChangingModulesFor 0, 'minutes'
+}
+
 dependencies {
+    implementation(fileTree(dir: 'libs', include: ['*.jar']))
     implementation(project(':lib_frame_core'))
     //组件模式仅依赖公共库
     //集成模式依赖所有module业务组件

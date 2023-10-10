@@ -38,7 +38,7 @@ public enum ConverterMode {
     WIRE,
 
     /**
-     * protobuf转换器
+     * protobuf转换器（因要添加额外支持库，此项不作支持）
      */
     PROTOCOL_BUFFERS,
 

@@ -67,18 +67,11 @@ afterEvaluate {
                 // 依赖传递：pom文件中声明依赖，从而传递到使用方
                 pom.withXml {
                     def dependenciesNode = asNode().appendNode('dependencies')
-                    configurations.implementation.allDependencies.each { dependency ->
+                    configurations.api.allDependencies.each { dependency ->
                         def dependencyNode = dependenciesNode.appendNode('dependency')
                         dependencyNode.appendNode('groupId', dependency.group)
                         dependencyNode.appendNode('artifactId', dependency.name)
                         dependencyNode.appendNode('version', dependency.version)
-                    }
-                    configurations.compileOnly.allDependencies.each { dependency ->
-                        def dependencyNode = dependenciesNode.appendNode('dependency')
-                        dependencyNode.appendNode('groupId', dependency.group)
-                        dependencyNode.appendNode('artifactId', dependency.name)
-                        dependencyNode.appendNode('version', dependency.version)
-                        dependencyNode.appendNode('scope', 'provided')
                     }
                 }
                 //项目配置

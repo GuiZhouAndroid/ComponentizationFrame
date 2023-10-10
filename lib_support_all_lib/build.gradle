@@ -21,6 +21,7 @@ android {
     defaultConfig {
         minSdk app["minSdk"]
         consumerProguardFiles "consumer-rules.pro"
+        multiDexEnabled true
     }
 
     compileOptions {
@@ -35,17 +36,15 @@ configurations.configureEach {
 }
 
 dependencies {
-    //AS版本支持
-    implementation platform(dep["protobuf-java"])
-    implementation platform(dep["kotlin-bom"])
-    //工具库
-    implementation(dep["my-lib-utils"])
+    // ----------------远程自制依赖总库，不引入本框架业务中，仅作为打包统计-----------------
     //对话框
-    implementation(dep["my-lib-dialog"])
+    api(dep["my-lib-dialog"])
     //滑动返回
-    implementation(dep["my-lib-swipeback"])
+    api(dep["my-lib-swipeback"])
+    //工具类库
+    api(dep["my-lib-utils"])
     //mvp架构
-    implementation(dep["my-lib-mvp"])
+    api(dep["my-lib-mvp"])
     //网络请求
-    implementation(dep["my-lib-network"])
+    api(dep["my-lib-network"])
 }

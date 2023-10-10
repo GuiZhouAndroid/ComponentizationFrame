@@ -1,13 +1,9 @@
 //统一管理版本号：通过相同的方式引入不同版本的依赖库，默认会选择最新版本，不同的方式引入则会产生依赖冲突
 
 //acra日志崩溃记录
-def my_version = '1.0.0-SNAPSHOT'
+def my_lib_version = '1.0.0-SNAPSHOT'
 //acra日志崩溃记录
 def acraVersion = '4.9.0'
-//protobuf
-def protobuf_java_version = '3.19.3'
-//kotlin
-def kotlin_bom_version = '1.9.0'
 //Androidx
 def appcompat_version = '1.6.1'
 def constraintlayout_version = '2.1.4'
@@ -17,7 +13,7 @@ def material_version = '1.9.0'
 //hilt
 def hilt_version = '2.48'
 //AutoDispose2
-def autoDispose2_version = '2.1.0'
+def autoDispose2_version = '2.2.1'
 //lombok
 def lombok_version = '1.18.28'
 //gson
@@ -29,19 +25,24 @@ def okhttp3_logging_interceptor_version = '4.11.0'
 //retrofit2
 def retrofit2_version = '2.9.0'
 //rxJava3
-def rxjava_version = '3.1.7'
+def rxjava_version = '3.1.8'
 def rxAndroid_version = '3.0.2'
 //阿里
 def ali_oss_version = '2.9.15'
 def ali_router_version = '1.5.2'
 
-//构建配置 上次修改时间：2023.10.3
+//构建配置 上次修改时间：2023.10.10
 project.ext {
 
-    // 切换继承与组件模式,是否是模块化模式
+    // 切换module模式
     // 组件模式 true
     // 集成模式 false
     isModuleMode = false
+
+    // true：使用本地lib支持库，开发时建议选择true，便于实时修改代码，不更改将“会”打包本地lib支持库的dependency到SonaType
+    // false：使用SonaType的Maven中央远程仓库依赖，且“不会”打包本地lib支持库的dependency到SonaType，重点：false再去推送
+    // false 错误推送示例：implementation 'ComponentizationFrame:lib_support_dialog:unspecified'
+    isUseLocalSupportLib = true
 
     // 定义 android 变量 , 类型是字典 Map 集合
     // 其中定义了若干键值对集合
@@ -88,12 +89,11 @@ project.ext {
     // 统一管理依赖库  ${} 表示引用之前定义的变量
     dependenciesConfig = [
             //自制依赖
-            "my-lib-utils"                  : "work.zsdev:lib-utils:${my_version}",
-            "my-lib-dialog"                 : "work.zsdev:lib-dialog:${my_version}",
-            "my-lib-swipeback"              : "work.zsdev:lib-swipeback:${my_version}",
-            "my-lib-mvp"                    : "work.zsdev:lib-mvp:${my_version}",
-            "my-lib-network"                : "work.zsdev:lib-network:${my_version}",
-            "my-libs-all"                   : "work.zsdev:libs-all:${my_version}",
+            "my-lib-utils"                  : "work.zsdev:lib-utils:${my_lib_version}",
+            "my-lib-dialog"                 : "work.zsdev:lib-dialog:${my_lib_version}",
+            "my-lib-swipeback"              : "work.zsdev:lib-swipeback:${my_lib_version}",
+            "my-lib-mvp"                    : "work.zsdev:lib-mvp:${my_lib_version}",
+            "my-lib-network"                : "work.zsdev:lib-network:${my_lib_version}",
 
             //日志记录
             "acra"                          : "ch.acra:acra:${acraVersion}",
@@ -105,10 +105,6 @@ project.ext {
             "acra-limiter"                  : "ch.acra:acra-limiter:${acraVersion}", //限制 acra 从一台设备发送的报告数量
             "acra-advanced-scheduler"       : "ch.acra:acra-advanced-scheduler:${acraVersion}", //控制何时发送报告（例如仅在 WiFi 上）并且可以在崩溃后重新启动应用程序
             "acra-core"                     : "ch.acra:acra-core:${acraVersion}", // //定制
-
-            //jetified-protobuf-java MethodHandle.invoke and MethodHandle.invokeExact are only supported starting with Android O (--min-api 26)
-            // 解决方案：minSdk 26及以上 或添加 最新protobuf-java库
-            "protobuf-java"                 : "com.google.protobuf:protobuf-java:${protobuf_java_version}",
 
             // Androidx
             "appcompat"                     : "androidx.appcompat:appcompat:${appcompat_version}",
@@ -124,9 +120,6 @@ project.ext {
             // hilt库与其注解处理器
             "hilt-android"                  : "com.google.dagger:hilt-android:${hilt_version}",
             "hilt-compiler"                 : "com.google.dagger:hilt-compiler:${hilt_version}",
-
-            // kotlin
-            "kotlin-bom"                    : "org.jetbrains.kotlin:kotlin-bom:${kotlin_bom_version}",//添加此项避免开启dataBinding时出现kotlin-stdlib-jdk版本冲突
 
             // AutoDispose2：是一种RxJava工具，用于通过处置/取消将RxJava流的执行自动绑定到提供的作用域
             "autodispose-android"           : "com.uber.autodispose2:autodispose-android:${autoDispose2_version}",
@@ -144,8 +137,8 @@ project.ext {
             "logging-interceptor"           : "com.squareup.okhttp3:logging-interceptor:${okhttp3_logging_interceptor_version}", //OkHttp3日志拦截器
 
             //retrofit2
-            "adapter-rxjava3"               : "com.squareup.retrofit2:adapter-rxjava3:${retrofit2_version}",//retrofit2专用rxjava3适配器
             "retrofit"                      : "com.squareup.retrofit2:retrofit:${retrofit2_version}",
+            "adapter-rxjava3"               : "com.squareup.retrofit2:adapter-rxjava3:${retrofit2_version}",//retrofit2专用rxjava3适配器
             "converter-gson"                : "com.squareup.retrofit2:converter-gson:${retrofit2_version}",
             "converter-scalars"             : "com.squareup.retrofit2:converter-scalars:${retrofit2_version}",
             "converter-jackson"             : "com.squareup.retrofit2:converter-jackson:${retrofit2_version}",

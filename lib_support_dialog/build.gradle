@@ -21,6 +21,7 @@ android {
     defaultConfig {
         minSdk app["minSdk"]
         consumerProguardFiles "consumer-rules.pro"
+        multiDexEnabled true
     }
 
     compileOptions {
@@ -35,11 +36,11 @@ configurations.configureEach {
 }
 
 dependencies {
-    //AS版本支持
-    implementation platform(dep["protobuf-java"])
-    implementation platform(dep["kotlin-bom"])
+    // ----------------引用远程第三方依赖库-----------------
+
+    // ----------------引用远程自制依赖库-----------------
     //androidx
-    implementation(dep["appcompat"])
+    api(dep["appcompat"])
     //自定义View
-    implementation(dep["library"])
+    api(dep["library"])
 }

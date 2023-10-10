@@ -20,6 +20,7 @@ android {
     defaultConfig {
         minSdk app["minSdk"]
         consumerProguardFiles "consumer-rules.pro"
+        multiDexEnabled true
     }
 
     compileOptions {
@@ -34,24 +35,26 @@ configurations.configureEach {
 }
 
 dependencies {
-    //AS版本支持
-    implementation platform(dep["protobuf-java"])
-    implementation platform(dep["kotlin-bom"])
+
+    // ----------------引用远程第三方依赖库-----------------
+
+    // ----------------引用远程自制依赖库-----------------
+
     //androidx
-    implementation(dep["appcompat"])
+    api(dep["appcompat"])
 
     //阿里云OSS
-    implementation(dep["oss-android-sdk"]) {
+    api(dep["oss-android-sdk"]) {
         //排除自带的旧版本okhttp3
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
         exclude group: 'com.squareup.okio', module: 'okio'
     }
 
     //OkHttp3
-    implementation(dep["okhttp"])
-    implementation(dep["okio"])
+    api(dep["okhttp"])
+    api(dep["okio"])
 
     //AutoDispose：是一种RxJava工具，用于通过处置/取消将RxJava流的执行自动绑定到提供的作用域
-    implementation(dep["autodispose-android"])
-    implementation(dep["autodispose-androidx-lifecycle"])
+    api(dep["autodispose-android"])
+    api(dep["autodispose-androidx-lifecycle"])
 }

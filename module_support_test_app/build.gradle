@@ -46,6 +46,9 @@ configurations.configureEach {
 }
 
 dependencies {
+    implementation(fileTree(dir: 'libs', include: ['*.jar']))
+    //待学习文件上传与下载
+    //implementation 'com.banzhi.lib:library:1.1.3'
     implementation project(':lib_frame_core')
 }
 

@@ -21,6 +21,7 @@ android {
     defaultConfig {
         minSdk app["minSdk"]
         consumerProguardFiles "consumer-rules.pro"
+        multiDexEnabled true
     }
 
     compileOptions {
@@ -39,26 +40,32 @@ configurations.configureEach {
 }
 
 dependencies {
-    //AS版本支持
-    implementation platform(dep["protobuf-java"])
-    implementation platform(dep["kotlin-bom"])
-    //自定义对话框
-    implementation(dep["my-lib-dialog"])
-    //滑动返回
-    implementation(dep["my-lib-swipeback"])
-    //工具库
-    implementation(dep["my-lib-utils"])
+
+    // ----------------引用远程第三方依赖库-----------------
 
     //androidx
-    implementation(dep["appcompat"])
-    compileOnly(dep["multidex"])
-    //material
-    implementation(dep["material"])
-
-    //AutoDispose：是一种RxJava工具，用于通过处置/取消将RxJava流的执行自动绑定到提供的作用域
-    implementation(dep["autodispose-android"])
-    implementation(dep["autodispose-androidx-lifecycle"])
-
+    api(dep["appcompat"])
+    api(dep["multidex"])
+    api(dep["material"])
     //lombok
-    compileOnly(dep["lombok"])
+    api(dep["lombok"])
+
+    // ----------------引用远程自制依赖库-----------------
+    //弹窗
+    api(dep["my-lib-dialog"])
+    //滑动返回
+    api(dep["my-lib-swipeback"])
+    //工具类库
+    api(dep["my-lib-utils"])
+
+
+    // ----------------使用本地自制库，便于开发时修改码，不用每次都改一次都推送SonaType-----------------
+    if (isUseLocalSupportLib) {
+        //弹窗
+        api(project(':lib_support_dialog'))
+        //滑动返回
+        api(project(':lib_support_swipeback'))
+        //工具类库
+        api(project(':lib_support_utils'))
+    }
 }
