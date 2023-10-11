@@ -104,16 +104,16 @@ public class ExceptionHandle {
                     ex.setMsg("未找到请求资源，请检查访问路径！");
                     break;
                 case REQUEST_TIMEOUT:
-                    ex.setMsg("请求超时！");
+                    ex.setMsg("请求超时，请稍候重试！！");
                     break;
                 case GATEWAY_TIMEOUT:
-                    ex.setMsg("网关超时！");
+                    ex.setMsg("网关超时，请稍候重试！！");
                     break;
                 case INTERNAL_SERVER_ERROR:
                     ex.setMsg("服务器内部错误！");
                     break;
                 case BAD_GATEWAY:
-                    ex.setMsg("网关错误！");
+                    ex.setMsg("网关错误，请稍候重试！！");
                     break;
                 case SERVICE_UNAVAILABLE:
                     ex.setMsg("服务器正在维护中，请您留意官方通知！");
@@ -126,20 +126,19 @@ public class ExceptionHandle {
                     break;
             }
             return ex;
-        } else if (e instanceof ServerException) {//服务器返回的错误
+        } else if (e instanceof ServerException) {
+            //自定义服务器异常，是前端和后端约束的cde和msg，而不是http类型的服务器内部错误
             ServerException resultException = (ServerException) e;
             ex = new ResponseThrowable(resultException, resultException.getCode());
             ex.setMsg(resultException.getMsg());
             return ex;
-        } else if (e instanceof JsonParseException
-                || e instanceof JSONException
-                || e instanceof ParseException) {
+        } else if (e instanceof JsonParseException || e instanceof JSONException || e instanceof ParseException) {
             ex = new ResponseThrowable(e, NetworkError.PARSE_ERROR);
             ex.setMsg("数据解析错误！");
             return ex;
-        } else if (e instanceof ConnectException || e instanceof SocketTimeoutException || e instanceof SocketException) {
+        } else if (e instanceof ConnectException || e instanceof SocketTimeoutException || e instanceof SocketException || e instanceof SocketTimeoutException) {
             ex = new ResponseThrowable(e, NetworkError.NETWORK_ERROR);
-            ex.setMsg("网络连接超时，请检查您的网络状态！");
+            ex.setMsg("网络连接超时，请稍候重试！");
             return ex;
         } else if (e instanceof SSLHandshakeException) {
             ex = new ResponseThrowable(e, NetworkError.SSL_ERROR);
@@ -156,7 +155,7 @@ public class ExceptionHandle {
             return ex;
         } else {
             ex = new ResponseThrowable(e, NetworkError.UNKNOWN);
-            ex.setMsg("sorry 故障啦！，攻城狮正在修复...");
+            ex.setMsg("sorry~系统故障啦！攻城狮正在修复...");
             return ex;
         }
     }

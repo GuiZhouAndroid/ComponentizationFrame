@@ -26,7 +26,7 @@ public class BaseApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         //初始化日志工具类
-        LogUtil.setLogEnable(true);
+        LogUtil.setLogEnable(true, true);
         LogUtil.i("BaseApplication", "onCreate()");
         //绑定Application
         baseApplication = this;

@@ -16,13 +16,13 @@ import android.util.Log;
 public class LogUtil {
 
     private static final String TAG = "LogUtil";
-    private static boolean LOG_ENABLE = true;
-    private static boolean DETAIL_ENABLE = true;
+    private static boolean IS_SHOW_SIMPLE_LOG = true;
+    private static boolean IS_SHOW_DETAIL_LOG = true;
 
     private static String buildMsg(String msg) {
         StringBuilder buffer = new StringBuilder();
 
-        if (DETAIL_ENABLE) {
+        if (IS_SHOW_DETAIL_LOG) {
             final StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[4];
             buffer.append("[ ");
             buffer.append(Thread.currentThread().getName());
@@ -33,23 +33,18 @@ public class LogUtil {
             buffer.append(": ");
             buffer.append(stackTraceElement.getMethodName());
         }
-
         buffer.append("() ] _____ ");
-
         buffer.append(msg);
-
         return buffer.toString();
     }
 
     /**
-     * LOG_ENABLE 设置是否显示Log
-     * DETAIL_ENABLE 设置是否显示详细Log
-     *
-     * @param enable true-显示/显示详细 false-不显示 /不显示详细
+     * @param isShowSimpleLogMsg 设置是否显示简单Log true-显示 false-不显示
+     * @param isShowDetailLogMsg 设置是否显示详细Log true-显示详细 false-不显示详细
      */
-    public static void setLogEnable(boolean enable) {
-        LOG_ENABLE = enable;
-        DETAIL_ENABLE = enable;
+    public static void setLogEnable(boolean isShowSimpleLogMsg, boolean isShowDetailLogMsg) {
+        IS_SHOW_SIMPLE_LOG = isShowSimpleLogMsg;
+        IS_SHOW_DETAIL_LOG = isShowDetailLogMsg;
     }
 
     /**
@@ -58,7 +53,7 @@ public class LogUtil {
      * @param msg log msg
      */
     public static void v(String msg) {
-        if (LOG_ENABLE) {
+        if (IS_SHOW_SIMPLE_LOG) {
             Log.v(TAG, buildMsg(msg));
         }
     }
@@ -70,7 +65,7 @@ public class LogUtil {
      * @param msg log msg
      */
     public static void v(String tag, String msg) {
-        if (LOG_ENABLE) {
+        if (IS_SHOW_SIMPLE_LOG) {
             Log.v(tag, buildMsg(msg));
         }
     }
@@ -81,7 +76,7 @@ public class LogUtil {
      * @param msg log msg
      */
     public static void d(String msg) {
-        if (LOG_ENABLE) {
+        if (IS_SHOW_SIMPLE_LOG) {
             Log.d(TAG, buildMsg(msg));
         }
     }
@@ -93,7 +88,7 @@ public class LogUtil {
      * @param msg log msg
      */
     public static void d(String tag, String msg) {
-        if (LOG_ENABLE) {
+        if (IS_SHOW_SIMPLE_LOG) {
             Log.d(tag, buildMsg(msg));
         }
     }
@@ -104,7 +99,7 @@ public class LogUtil {
      * @param msg log msg
      */
     public static void i(String msg) {
-        if (LOG_ENABLE) {
+        if (IS_SHOW_SIMPLE_LOG) {
             Log.i(TAG, buildMsg(msg));
         }
     }
@@ -116,7 +111,7 @@ public class LogUtil {
      * @param msg log msg
      */
     public static void i(String tag, String msg) {
-        if (LOG_ENABLE) {
+        if (IS_SHOW_SIMPLE_LOG) {
             Log.i(tag, buildMsg(msg));
         }
     }
@@ -127,7 +122,7 @@ public class LogUtil {
      * @param msg log msg
      */
     public static void w(String msg) {
-        if (LOG_ENABLE) {
+        if (IS_SHOW_SIMPLE_LOG) {
             Log.w(TAG, buildMsg(msg));
         }
     }
@@ -139,7 +134,7 @@ public class LogUtil {
      * @param e   exception
      */
     public static void w(String msg, Exception e) {
-        if (LOG_ENABLE) {
+        if (IS_SHOW_SIMPLE_LOG) {
             Log.w(TAG, buildMsg(msg), e);
         }
     }
@@ -151,7 +146,7 @@ public class LogUtil {
      * @param msg log msg
      */
     public static void w(String tag, String msg) {
-        if (LOG_ENABLE) {
+        if (IS_SHOW_SIMPLE_LOG) {
             Log.w(tag, buildMsg(msg));
         }
     }
@@ -164,7 +159,7 @@ public class LogUtil {
      * @param e   exception
      */
     public static void w(String tag, String msg, Exception e) {
-        if (LOG_ENABLE) {
+        if (IS_SHOW_SIMPLE_LOG) {
             Log.w(tag, buildMsg(msg), e);
         }
     }
@@ -175,7 +170,7 @@ public class LogUtil {
      * @param msg log msg
      */
     public static void e(String msg) {
-        if (LOG_ENABLE) {
+        if (IS_SHOW_SIMPLE_LOG) {
             Log.e(TAG, buildMsg(msg));
         }
     }
@@ -187,7 +182,7 @@ public class LogUtil {
      * @param e   exception
      */
     public static void e(String msg, Exception e) {
-        if (LOG_ENABLE) {
+        if (IS_SHOW_SIMPLE_LOG) {
             Log.e(TAG, buildMsg(msg), e);
         }
     }
@@ -199,7 +194,7 @@ public class LogUtil {
      * @param msg msg
      */
     public static void e(String tag, String msg) {
-        if (LOG_ENABLE) {
+        if (IS_SHOW_SIMPLE_LOG) {
             Log.e(tag, buildMsg(msg));
         }
     }
@@ -212,7 +207,7 @@ public class LogUtil {
      * @param e   exception
      */
     public static void e(String tag, String msg, Exception e) {
-        if (LOG_ENABLE) {
+        if (IS_SHOW_SIMPLE_LOG) {
             Log.e(tag, buildMsg(msg), e);
         }
     }

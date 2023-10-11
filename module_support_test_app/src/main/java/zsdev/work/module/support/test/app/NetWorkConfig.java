@@ -1,5 +1,7 @@
 package zsdev.work.module.support.test.app;
 
+import android.app.Application;
+
 import java.util.Map;
 
 import okhttp3.CookieJar;
@@ -26,6 +28,11 @@ public class NetWorkConfig implements INetworkConfig {
     @Override
     public Converter.Factory setCustomConverterFactory() {
         return null;
+    }
+
+    @Override
+    public Application getApplicationContext() {
+        return App.getApplication();
     }
 
     @Override

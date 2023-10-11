@@ -1,5 +1,7 @@
 package zsdev.work.lib.support.network;
 
+import android.app.Application;
+
 import java.util.Map;
 
 import okhttp3.CookieJar;
@@ -16,6 +18,13 @@ import zsdev.work.lib.support.network.interceptor.InterceptorHandler;
  * Author: 张松
  */
 public interface INetworkConfig {
+
+    /**
+     * 获取全局上下文参数
+     *
+     * @return 全局上下文
+     */
+    Application getApplicationContext();
 
     /**
      * 创建OkhttpClient拦截器数组，Retrofit依据配置调用addInterceptor()全部添加

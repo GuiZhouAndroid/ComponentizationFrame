@@ -10,9 +10,9 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.ObservableTransformer;
 import io.reactivex.rxjava3.core.Observer;
 import zsdev.work.lib.support.network.base.BaseResponse;
-import zsdev.work.lib.support.network.rxjava.function.FlowableErrorFunction;
-import zsdev.work.lib.support.network.rxjava.function.ObservableErrorFunction;
-import zsdev.work.lib.support.network.rxjava.function.ResponseFunction;
+import zsdev.work.lib.support.network.rxjava.function.FlowableHttpErrorFunction;
+import zsdev.work.lib.support.network.rxjava.function.HandlerHttpResponseFunction;
+import zsdev.work.lib.support.network.rxjava.function.ObservableHttpErrorFunction;
 
 
 /**
@@ -38,10 +38,13 @@ public class HandlerTransformer {
             @Override
             public Observable<T> apply(@NonNull Observable<BaseResponse<T>> observable) {
                 return observable
-                        //数据成功与异常处理
-                        .map(new ResponseFunction<>()).onErrorResumeNext(new ObservableErrorFunction<>())
-                        //Observable线程调度
-                        .compose(SchedulerTransformer.getObservableScheduler());
+                        // Observable线程调度
+                        .compose(SchedulerTransformer.getObservableScheduler())
+                        // 处理错误码500：数据成功与异常处理，先把数据传给HandlerHttpResponseFunction判断状态码code
+                        // 依据code!=200视为异常，同样也再HandlerHttpResponseFunction中抛出异常，调用onError()下游由onErrorResumeNext发射处理
+                        .map(new HandlerHttpResponseFunction<>())
+                        // 处理错误码400：有则将Throwable传给ObservableHttpErrorFunction处理
+                        .onErrorResumeNext(new ObservableHttpErrorFunction<>());
             }
         };
     }
@@ -60,10 +63,13 @@ public class HandlerTransformer {
             public Flowable<T> apply(@NonNull Flowable<BaseResponse<T>> flowable) {
                 //引用Function，若此处网络错误，直接onError(Throwable t)
                 return flowable
-                        //数据成功与异常处理
-                        .map(new ResponseFunction<>()).onErrorResumeNext(new FlowableErrorFunction<>())
-                        //Flowable线程调度
-                        .compose(SchedulerTransformer.getFlowableScheduler());
+                        // Flowable线程调度
+                        .compose(SchedulerTransformer.getFlowableScheduler())
+                        // 处理错误码500：数据成功与异常处理，先把数据传给HandlerHttpResponseFunction判断状态码code
+                        // 依据code!=200视为异常，同样也再HandlerHttpResponseFunction中抛出异常，调用onError()下游由onErrorResumeNext发射处理
+                        .map(new HandlerHttpResponseFunction<>())
+                        // 处理错误码400：有则将Throwable传给FlowableHttpErrorFunction处理
+                        .onErrorResumeNext(new FlowableHttpErrorFunction<>());
             }
         };
     }

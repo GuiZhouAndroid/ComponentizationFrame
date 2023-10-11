@@ -1,6 +1,5 @@
 package zsdev.work.lib.support.network;
 
-import android.content.Context;
 import android.text.TextUtils;
 
 import java.io.File;
@@ -33,6 +32,7 @@ import zsdev.work.lib.support.network.interceptor.CachesInterceptor;
 import zsdev.work.lib.support.network.interceptor.HeadersInterceptor;
 import zsdev.work.lib.support.network.interceptor.InterceptorHandler;
 import zsdev.work.lib.support.network.interceptor.InterceptorImpl;
+import zsdev.work.lib.support.network.interceptor.ResponseInterceptor;
 import zsdev.work.lib.support.network.interceptor.UrlParameterInterceptor;
 import zsdev.work.lib.support.utils.LogUtil;
 
@@ -228,7 +228,6 @@ public class NetworkHelper {
      * 网络配置引用优先级：netWorkConfig（直接注册） > iNetWorkSingleConfigMap（单次注册） > iNetWorkGlobalConfig（全局注册）
      * 若使用registerNetWorkGlobalConfig()注册，则调用getNetWorkGlobalConfig()获取全局网络配置
      *
-     * @param context                  上下文
      * @param baseUrl                  服务器URL
      * @param isEnableConverterFactory 是否启用实体转换器
      * @param isEnableRxJava           是否启用RxJava线程调度适配器
@@ -236,7 +235,7 @@ public class NetworkHelper {
      * @param netWorkConfig            网络配置
      * @return Retrofit对象
      */
-    public Retrofit getRetrofit(Context context, String baseUrl, boolean isEnableConverterFactory, boolean isEnableRxJava, boolean isEnableCookieStore, INetworkConfig netWorkConfig) {
+    public Retrofit getRetrofit(String baseUrl, boolean isEnableConverterFactory, boolean isEnableRxJava, boolean isEnableCookieStore, INetworkConfig netWorkConfig) {
         //服务器URL为空时程序关闭打印异常
         if (TextUtils.isEmpty(baseUrl)) throw new IllegalStateException("baseUrl can not be null!");
 
@@ -280,7 +279,7 @@ public class NetworkHelper {
             //开始构建Retrofit
             Retrofit.Builder builder = new Retrofit.Builder()
                     .baseUrl(baseUrl) //服务器URL
-                    .client(getHttpClient(context, baseUrl, netWorkConfig, isEnableCookieStore));//设置使用okhttp网络请求，加载Okhttp已配置的网络参数
+                    .client(getHttpClient(baseUrl, netWorkConfig, isEnableCookieStore));//设置使用okhttp网络请求，加载Okhttp已配置的网络参数
             //设置实体转换器模式
             if (!isEnableConverterFactory) {
                 LogUtil.i("NetworkHelper", "getRetrofit: Current not using converter factory state!" +
@@ -365,7 +364,6 @@ public class NetworkHelper {
     /**
      * 创建Retrofit的Class请求接口，默认使用全局网络配置
      *
-     * @param context                  上下文
      * @param baseUrl                  服务器URL
      * @param isEnableConverterFactory 是否启用实体转换器
      * @param isEnableRxJava           是否启用RxJava线程调度适配器
@@ -374,14 +372,13 @@ public class NetworkHelper {
      * @param <C>                      泛型
      * @return Retrofit对象
      */
-    public static <C> C getApiServiceClass(Context context, String baseUrl, boolean isEnableConverterFactory, boolean isEnableRxJava, boolean isEnableCookieStore, Class<C> service) {
-        return getInstance().getRetrofit(context, baseUrl, isEnableConverterFactory, isEnableRxJava, isEnableCookieStore, null).create(service);
+    public static <C> C getApiServiceClass(String baseUrl, boolean isEnableConverterFactory, boolean isEnableRxJava, boolean isEnableCookieStore, Class<C> service) {
+        return getInstance().getRetrofit(baseUrl, isEnableConverterFactory, isEnableRxJava, isEnableCookieStore, null).create(service);
     }
 
     /**
      * 创建Retrofit的Class请求接口，指定使用单次网络配置
      *
-     * @param context                  上下文
      * @param baseUrl                  服务器URL
      * @param isEnableConverterFactory 是否启用实体转换器
      * @param isEnableRxJava           是否启用RxJava线程调度适配器
@@ -391,8 +388,8 @@ public class NetworkHelper {
      * @param <C>                      泛型
      * @return Retrofit对象
      */
-    public static <C> C getApiServiceClass(Context context, String baseUrl, boolean isEnableConverterFactory, boolean isEnableRxJava, boolean isEnableCookieStore, Class<C> service, INetworkConfig singleConfig) {
-        return getInstance().getRetrofit(context, baseUrl, isEnableConverterFactory, isEnableRxJava, isEnableCookieStore, singleConfig).create(service);
+    public static <C> C getApiServiceClass(String baseUrl, boolean isEnableConverterFactory, boolean isEnableRxJava, boolean isEnableCookieStore, Class<C> service, INetworkConfig singleConfig) {
+        return getInstance().getRetrofit(baseUrl, isEnableConverterFactory, isEnableRxJava, isEnableCookieStore, singleConfig).create(service);
     }
 
     /**
@@ -426,13 +423,12 @@ public class NetworkHelper {
     /**
      * 获取和配置OkHttpClient：连接超时时间、读取和写入超时时间、自定义拦截器、请求日志拦截器
      *
-     * @param context             上下文
      * @param baseUrl             服务器URL
      * @param netWorkConfig       网络配置
      * @param isEnableCookieStore 是否启用Cookie存取模式
      * @return OkHttpClient对象
      */
-    public OkHttpClient getHttpClient(Context context, String baseUrl, INetworkConfig netWorkConfig, boolean isEnableCookieStore) {
+    public OkHttpClient getHttpClient(String baseUrl, INetworkConfig netWorkConfig, boolean isEnableCookieStore) {
         //服务器URL为空时程序关闭打印异常
         if (TextUtils.isEmpty(baseUrl)) throw new IllegalStateException("baseUrl can not be null!");
 
@@ -476,7 +472,7 @@ public class NetworkHelper {
                 //匹配模式设置属性
                 switch (netWorkConfig.setCookieStoreMode()) {
                     case SP:
-                        builder.cookieJar(new CookieJarImpl(new SpCookieStore(context)));
+                        builder.cookieJar(new CookieJarImpl(new SpCookieStore(iNetWorkGlobalConfig.getApplicationContext())));
                         LogUtil.i("NetworkHelper", "getHttpClient: 当前Cookie存取模式是SharedPreferences");
                         break;
                     case MEMORY:
@@ -500,6 +496,30 @@ public class NetworkHelper {
                         break;
                 }
             }
+
+            //判断是否开启缓存 + 设置缓存时间
+            if (netWorkConfig.setIsEnableCache()) {
+                builder.addInterceptor(new InterceptorImpl(
+                        new CachesInterceptor(iNetWorkGlobalConfig.getApplicationContext(), netWorkConfig.setCacheMaxAgeTimeUnitSeconds() != 0
+                                ? netWorkConfig.setCacheMaxAgeTimeUnitSeconds()
+                                : DEFAULT_MAX_AGE, netWorkConfig.setCacheMaxStaleTimeUnitSeconds() != 0
+                                ? netWorkConfig.setCacheMaxStaleTimeUnitSeconds()
+                                : DEFAULT_MAX_STALE))
+                );
+
+                //构建设置设置缓存目录和缓存大小为10MB
+                builder.cache(new Cache(new File(
+                        iNetWorkGlobalConfig.getApplicationContext().getCacheDir().getAbsolutePath(), "MyNetworkCache"), 10 * 1024 * 1024)
+                );
+                LogUtil.i("NetworkHelper", "已启用Okhttp缓存：缓存大小==" + 10 * 1024 * 1024);
+            } else {
+                LogUtil.i("NetworkHelper", "未启用Okhttp缓存");
+            }
+
+            //拦截器时开始请求时才会触发
+
+            //响应拦截器
+            builder.addInterceptor(new InterceptorImpl(new ResponseInterceptor()));
             //设置请求头
             builder.addInterceptor(new InterceptorImpl(new HeadersInterceptor(netWorkConfig.setHeaderParameters())));
             //设置URL公共参数
@@ -532,25 +552,6 @@ public class NetworkHelper {
                 LogUtil.i("NetworkHelper", "已启用Okhttp默认日志打印");
             } else {
                 LogUtil.i("NetworkHelper", "未启用Okhttp默认日志打印");
-            }
-
-            //判断是否开启缓存 + 设置缓存时间
-            if (netWorkConfig.setIsEnableCache()) {
-                builder.addInterceptor(new InterceptorImpl(
-                        new CachesInterceptor(context, netWorkConfig.setCacheMaxAgeTimeUnitSeconds() != 0
-                                ? netWorkConfig.setCacheMaxAgeTimeUnitSeconds()
-                                : DEFAULT_MAX_AGE, netWorkConfig.setCacheMaxStaleTimeUnitSeconds() != 0
-                                ? netWorkConfig.setCacheMaxStaleTimeUnitSeconds()
-                                : DEFAULT_MAX_STALE))
-                );
-
-                //构建设置设置缓存目录和缓存大小为10MB
-                builder.cache(new Cache(new File(
-                        context.getCacheDir().getAbsolutePath(), "MyNetworkCache"), 10 * 1024 * 1024)
-                );
-                LogUtil.i("NetworkHelper", "已启用Okhttp缓存：缓存时间==" + 10 * 1024 * 1024);
-            } else {
-                LogUtil.i("NetworkHelper", "未启用Okhttp缓存");
             }
 
             //开始构建OkhttpClient对象

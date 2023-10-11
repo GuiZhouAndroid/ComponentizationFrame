@@ -35,11 +35,11 @@ public class SchedulerTransformer {
             @Override
             public Observable<T> apply(@NonNull Observable<T> observable) {
                 return observable
-                        //这仅影响Observable订阅时使用的线程，并且它将保留在下游,如果流中有多个实例subscribeOn，则只有第一个具有实际效果
+                        //线程订阅：这仅影响Observable订阅时使用的线程，并且它将保留在下游,如果流中有多个实例subscribeOn，则只有第一个具有实际效果
                         .subscribeOn(Schedulers.io())
-                        //指定下游运算所在的线程，使用observeOn所指定的线程来操作的后续切换和数据流推送
+                        //观察Android主线程：指定下游运算所在的线程，使用observeOn所指定的线程来操作的后续切换和数据流推送
                         .observeOn(AndroidSchedulers.mainThread())
-                        //解绑上次的线程
+                        //解绑线程订阅：上次的线程
                         .unsubscribeOn(Schedulers.io());
             }
         };
@@ -59,11 +59,11 @@ public class SchedulerTransformer {
             @Override
             public Flowable<T> apply(@NonNull Flowable<T> flowable) {
                 return flowable
-                        //这仅影响Observable订阅时使用的线程，并且它将保留在下游,如果流中有多个实例subscribeOn，则只有第一个具有实际效果
+                        //线程订阅：这仅影响Observable订阅时使用的线程，并且它将保留在下游,如果流中有多个实例subscribeOn，则只有第一个具有实际效果
                         .subscribeOn(Schedulers.io())
-                        //指定下游运算所在的线程，使用observeOn所指定的线程来操作的后续切换和数据流推送
+                        //观察Android主线程：指定下游运算所在的线程，使用observeOn所指定的线程来操作的后续切换和数据流推送
                         .observeOn(AndroidSchedulers.mainThread())
-                        //解绑上次的线程
+                        //解绑线程订阅：上次的线程
                         .unsubscribeOn(Schedulers.io());
             }
         };

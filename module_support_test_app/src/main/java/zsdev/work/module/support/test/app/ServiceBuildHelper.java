@@ -26,10 +26,10 @@ public class ServiceBuildHelper {
         if (apiService == null) {
             synchronized (ServiceBuildHelper.class) {
 //                if (apiService == null) {
-//                    apiService = NetworkHelper.getApiServiceClass(App.getContext(), API_BASE_URL, true, APIService.class);
+//                    apiService = NetworkHelper.getApiServiceClass(API_BASE_URL, true, APIService.class);
 //                }
                 if (apiService == null) {
-                    apiService = NetworkHelper.getApiServiceClass(App.getContext(), API_BASE_URL, true, true, false, APIService.class, new NetWorkConfig());
+                    apiService = NetworkHelper.getApiServiceClass(API_BASE_URL, true, true, false, APIService.class, new NetWorkConfig());
                 }
             }
         }

@@ -1,7 +1,5 @@
 package zsdev.work.lib.support.mvp;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;

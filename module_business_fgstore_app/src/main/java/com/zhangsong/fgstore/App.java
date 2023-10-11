@@ -22,8 +22,6 @@ public class App extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        //初始化日志工具类
-        LogUtil.setLogEnable(true);
         instance = this;
         initARouter();
     }

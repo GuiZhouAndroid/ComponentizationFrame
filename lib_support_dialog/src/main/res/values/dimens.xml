@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- dp-->
     <dimen name="dp_4">4dp</dimen>
     <dimen name="margin">16dp</dimen>
+
+    <!-- sp-->
+    <dimen name="sp_14">14sp</dimen>
 </resources>

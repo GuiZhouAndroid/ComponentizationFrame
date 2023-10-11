@@ -12,8 +12,13 @@ public class BaseResponse<T> {
     private String msg;
     private T data;
 
+    /**
+     * 请求成功
+     *
+     * @return true 是否请求成功
+     */
     public boolean isSuccess() {
-        return code == 200;
+        return (200 <= code) && (code < 299);
     }
 
     public int getCode() {

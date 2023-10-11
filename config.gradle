@@ -31,7 +31,6 @@ def rxAndroid_version = '3.0.2'
 def ali_oss_version = '2.9.15'
 def ali_router_version = '1.5.2'
 
-//构建配置 上次修改时间：2023.10.10
 project.ext {
 
     // 切换module模式
@@ -45,6 +44,7 @@ project.ext {
     // “推完aar库后true为使用本地库，false为使用远程自制库”
     isUseLocalSupportLib = true
 
+    // 以下配置：构建上次修改时间：2023.10.10
     // 定义 android 变量 , 类型是字典 Map 集合
     // 其中定义了若干键值对集合
     androidConfig = ["compileSdk"       : 34,

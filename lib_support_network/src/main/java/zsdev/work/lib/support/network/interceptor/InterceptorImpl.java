@@ -31,6 +31,7 @@ public class InterceptorImpl implements Interceptor {
 
     /**
      * 在请求与响应中间将数据使用接口装载传递，向外部提供Request、Response可调用方式，进行统一管理
+     * 依据总耗时优化网络
      *
      * @param chain chain
      * @return 响应结果

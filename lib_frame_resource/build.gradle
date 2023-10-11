@@ -30,12 +30,11 @@ configurations.configureEach {
 }
 
 dependencies {
-    api(fileTree(dir: 'libs', include: ['*.jar']))
     // ----------------引用远程第三方依赖库-----------------
-
-    // ----------------引用远程自制依赖库-----------------
     //androidx
     implementation(dep["appcompat"])
     //material
     implementation(dep["material"])
+
+    // ----------------引用远程自制依赖库-----------------
 }

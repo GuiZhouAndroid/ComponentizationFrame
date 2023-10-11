@@ -6,6 +6,7 @@ import zsdev.work.lib.support.mvp.BasePresenter;
 import zsdev.work.lib.support.network.base.BaseFlowableSubscriber;
 import zsdev.work.lib.support.network.exception.ResponseThrowable;
 import zsdev.work.lib.support.network.rxjava.transformer.HandlerTransformer;
+import zsdev.work.lib.support.utils.LogUtil;
 import zsdev.work.module.support.test.app.App;
 import zsdev.work.module.support.test.app.bean.My;
 import zsdev.work.module.support.test.app.contract.MainContract;
@@ -18,14 +19,17 @@ import zsdev.work.module.support.test.app.model.MainModel;
  */
 public class MainPresenter extends BasePresenter<MainContract.View, MainContract.Model> implements MainContract.Presenter {
 
+    // TODO: 2023/10/11 待重构new对象，引用hilt注入优化
     MainModel mainModel = new MainModel();
 
     public MainPresenter(MainContract.View nowView) {
         super(nowView);
+        LogUtil.i(TAG, "MainPresenter()");
     }
 
     public MainPresenter(MainContract.View nowView, MainContract.Model nowModel) {
         super(nowView, nowModel);
+        LogUtil.i(TAG, "MainPresenter()");
     }
 
     @Override
