@@ -19,11 +19,8 @@ public class LoadingTextView extends AppCompatTextView {
 
     private LinearGradient mLinearGradient;
     private Matrix mGradientMatrix;
-    private Paint mPaint;
     private int mViewWidth = 0;
     private int mTranslate = 0;
-
-    private boolean mAnimating = true;
 
     public LoadingTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -35,7 +32,7 @@ public class LoadingTextView extends AppCompatTextView {
         if (mViewWidth == 0) {
             mViewWidth = getMeasuredWidth();
             if (mViewWidth > 0) {
-                mPaint = getPaint();
+                Paint mPaint = getPaint();
                 mLinearGradient = new LinearGradient(-mViewWidth, 0, 0, 0,
                         new int[]{0x33ffffff, 0xffd81e06, 0x33ffffff},
                         new float[]{0, 0.5f, 1}, Shader.TileMode.CLAMP);
@@ -48,7 +45,7 @@ public class LoadingTextView extends AppCompatTextView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (mAnimating && mGradientMatrix != null) {
+        if (mGradientMatrix != null) {
             mTranslate += mViewWidth / 10;
             if (mTranslate > 2 * mViewWidth) {
                 mTranslate = -mViewWidth;

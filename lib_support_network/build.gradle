@@ -66,11 +66,7 @@ dependencies {
     api(dep["converter-scalars"])
     api(dep["converter-jackson"])
     api(dep["converter-simplexml"])
-    api(dep["converter-jaxb"])
-    api(dep["converter-java8"])
-    api(dep["converter-guava"])
     api(dep["converter-moshi"])
-    api(dep["converter-wire"])
 
     // rxJava3
     api(dep["rxjava"])

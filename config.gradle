@@ -8,6 +8,7 @@ def acraVersion = '4.9.0'
 def appcompat_version = '1.6.1'
 def constraintlayout_version = '2.1.4'
 def multidex_version = '2.0.1'
+def preference_version = '1.2.1'
 //material
 def material_version = '1.9.0'
 //hilt
@@ -112,6 +113,7 @@ project.ext {
             "appcompat"                     : "androidx.appcompat:appcompat:${appcompat_version}",
             "constraintlayout"              : "androidx.constraintlayout:constraintlayout:${constraintlayout_version}",
             "multidex"                      : "androidx.multidex:multidex:${multidex_version}",
+            "preference"                    : "androidx.preference:preference:${preference_version}",
 
             // material
             "material"                      : "com.google.android.material:material:${material_version}",
@@ -145,12 +147,7 @@ project.ext {
             "converter-scalars"             : "com.squareup.retrofit2:converter-scalars:${retrofit2_version}",
             "converter-jackson"             : "com.squareup.retrofit2:converter-jackson:${retrofit2_version}",
             "converter-simplexml"           : "com.squareup.retrofit2:converter-simplexml:${retrofit2_version}",
-            "converter-protobuf"            : "com.squareup.retrofit2:converter-protobuf:${retrofit2_version}",
-            "converter-jaxb"                : "com.squareup.retrofit2:converter-jaxb:${retrofit2_version}",
-            "converter-java8"               : "com.squareup.retrofit2:converter-java8:${retrofit2_version}",
-            "converter-guava"               : "com.squareup.retrofit2:converter-guava:${retrofit2_version}",
             "converter-moshi"               : "com.squareup.retrofit2:converter-moshi:${retrofit2_version}",
-            "converter-wire"                : "com.squareup.retrofit2:converter-wire:${retrofit2_version}",
 
             // rxJava3
             "rxjava"                        : "io.reactivex.rxjava3:rxjava:${rxjava_version}",

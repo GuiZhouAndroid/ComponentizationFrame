@@ -12,18 +12,14 @@ import okhttp3.CookieJar;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit.converter.guava.GuavaOptionalConverterFactory;
-import retrofit.converter.java8.Java8OptionalConverterFactory;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
-import retrofit2.converter.jaxb.JaxbConverterFactory;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
-import retrofit2.converter.wire.WireConverterFactory;
 import zsdev.work.lib.support.network.cookie.CookieJarImpl;
 import zsdev.work.lib.support.network.cookie.DBCookieStore;
 import zsdev.work.lib.support.network.cookie.MemoryCookieStore;
@@ -252,10 +248,10 @@ public class NetworkHelper {
 
             LogUtil.i("NetworkHelper", "getRetrofit: " + baseUrl + "当前未使用参数传递注册网络配置");
 
-            //先根据请求的服务器URL在Map集合中查是否已存在注册网络配置，如果已注册网络配置直接赋值给netWorkConfig变量提供后续使用
+            //先根据请求的服务器URL在Map集合中查baseUrl对应values是否已存在注册单次网络配置，如果已注册单次网络配置直接赋值给netWorkConfig变量提供后续使用
             netWorkConfig = getNetWorkSingleConfigMap().get(baseUrl);
 
-            //如果未注册网络配置情况去赋值给netWorkConfig变量就为null
+            //如果未注册单次网络配置情况去赋值给netWorkConfig变量就为null
             if (netWorkConfig == null) {
 
                 LogUtil.i("NetworkHelper", "getRetrofit: " + baseUrl + "当前使用全局网络配置");
@@ -313,22 +309,6 @@ public class NetworkHelper {
                     case SIMPLE_XML:
                         builder.addConverterFactory(SimpleXmlConverterFactory.create());
                         LogUtil.i("NetworkHelper", "getRetrofit: 使用simplexml转换器");
-                        break;
-                    case WIRE:
-                        builder.addConverterFactory(WireConverterFactory.create());
-                        LogUtil.i("NetworkHelper", "getRetrofit: 使用wire转换器");
-                        break;
-                    case JAXB:
-                        builder.addConverterFactory(JaxbConverterFactory.create());
-                        LogUtil.i("NetworkHelper", "getRetrofit: 使用jaxb转换器");
-                        break;
-                    case JAVA8:
-                        builder.addConverterFactory(Java8OptionalConverterFactory.create());
-                        LogUtil.i("NetworkHelper", "getRetrofit: 使用java8转换器");
-                        break;
-                    case GUAVA:
-                        builder.addConverterFactory(GuavaOptionalConverterFactory.create());
-                        LogUtil.i("NetworkHelper", "getRetrofit: 使用guava转换器");
                         break;
                     case CUSTOM:
                         Converter.Factory factory = netWorkConfig.setCustomConverterFactory();

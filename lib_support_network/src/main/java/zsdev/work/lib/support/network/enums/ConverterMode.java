@@ -33,7 +33,7 @@ public enum ConverterMode {
     SIMPLE_XML,
 
     /**
-     * wire转换器
+     * wire转换器（因要添加额外支持库，此项不作支持）
      */
     WIRE,
 
@@ -43,17 +43,17 @@ public enum ConverterMode {
     PROTOCOL_BUFFERS,
 
     /**
-     * jaxb转换器
+     * jaxb转换器（因要添加额外支持库，此项不作支持）
      */
     JAXB,
 
     /**
-     * java8转换器
+     * java8转换器（因要添加额外支持库，此项不作支持）
      */
     JAVA8,
 
     /**
-     * guava转换器
+     * guava转换器（因要添加额外支持库，此项不作支持）
      */
     GUAVA,
 

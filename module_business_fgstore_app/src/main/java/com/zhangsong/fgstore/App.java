@@ -4,7 +4,6 @@ import com.alibaba.android.arouter.launcher.ARouter;
 
 import zsdev.work.lib.support.mvp.BaseApplication;
 import zsdev.work.lib.support.utils.InitUtil;
-import zsdev.work.lib.support.utils.LogUtil;
 
 
 /**
