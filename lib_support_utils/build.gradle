@@ -37,9 +37,6 @@ configurations.configureEach {
 dependencies {
 
     // ----------------引用远程第三方依赖库-----------------
-
-    // ----------------引用远程自制依赖库-----------------
-
     //androidx
     api(dep["appcompat"])
 
@@ -57,4 +54,6 @@ dependencies {
     //AutoDispose：是一种RxJava工具，用于通过处置/取消将RxJava流的执行自动绑定到提供的作用域
     api(dep["autodispose-android"])
     api(dep["autodispose-androidx-lifecycle"])
+
+    // ----------------引用远程自制依赖库-----------------
 }

@@ -39,9 +39,10 @@ project.ext {
     // 集成模式 false
     isModuleMode = false
 
-    // true：使用本地lib支持库，开发时建议选择true，便于实时修改代码，不更改将“会”打包本地lib支持库的dependency到SonaType
-    // false：使用SonaType的Maven中央远程仓库依赖，且“不会”打包本地lib支持库的dependency到SonaType，重点：false再去推送
-    // false 错误推送示例：implementation 'ComponentizationFrame:lib_support_dialog:unspecified'
+    // true：使用本地lib支持库，便于实时修改代码
+    // false：使用SonaType的Maven至远程库
+    // 重点：aar库正确打包到SonaType：“true时不推aar库”，“false再去推送aar库”
+    // “推完aar库后true为使用本地库，false为使用远程自制库”
     isUseLocalSupportLib = true
 
     // 定义 android 变量 , 类型是字典 Map 集合
@@ -94,6 +95,7 @@ project.ext {
             "my-lib-swipeback"              : "work.zsdev:lib-swipeback:${my_lib_version}",
             "my-lib-mvp"                    : "work.zsdev:lib-mvp:${my_lib_version}",
             "my-lib-network"                : "work.zsdev:lib-network:${my_lib_version}",
+            "my-libs-all"                   : "work.zsdev:libs-all:${my_lib_version}",
 
             //日志记录
             "acra"                          : "ch.acra:acra:${acraVersion}",

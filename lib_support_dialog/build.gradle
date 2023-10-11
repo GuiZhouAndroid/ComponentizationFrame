@@ -37,10 +37,10 @@ configurations.configureEach {
 
 dependencies {
     // ----------------引用远程第三方依赖库-----------------
-
-    // ----------------引用远程自制依赖库-----------------
     //androidx
     api(dep["appcompat"])
     //自定义View
     api(dep["library"])
+
+    // ----------------引用远程自制依赖库-----------------
 }

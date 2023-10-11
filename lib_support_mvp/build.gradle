@@ -50,22 +50,22 @@ dependencies {
     //lombok
     api(dep["lombok"])
 
-    // ----------------引用远程自制依赖库-----------------
-    //弹窗
-    api(dep["my-lib-dialog"])
-    //滑动返回
-    api(dep["my-lib-swipeback"])
-    //工具类库
-    api(dep["my-lib-utils"])
-
-
-    // ----------------使用本地自制库，便于开发时修改码，不用每次都改一次都推送SonaType-----------------
+    //判断自制lib库依赖方式
     if (isUseLocalSupportLib) {
+        // ----------------使用本地自制库，便于开发时修改码，不用每次都改一次都推送SonaType-----------------
         //弹窗
         api(project(':lib_support_dialog'))
         //滑动返回
         api(project(':lib_support_swipeback'))
         //工具类库
         api(project(':lib_support_utils'))
+    } else {
+        // ----------------引用远程自制依赖库-----------------
+        //弹窗
+        api(dep["my-lib-dialog"])
+        //滑动返回
+        api(dep["my-lib-swipeback"])
+        //工具类库
+        api(dep["my-lib-utils"])
     }
 }
