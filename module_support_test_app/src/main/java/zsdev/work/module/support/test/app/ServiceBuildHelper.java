@@ -25,11 +25,8 @@ public class ServiceBuildHelper {
     public static synchronized APIService getApiService() {
         if (apiService == null) {
             synchronized (ServiceBuildHelper.class) {
-//                if (apiService == null) {
-//                    apiService = NetworkHelper.getApiServiceClass(API_BASE_URL, true, APIService.class);
-//                }
                 if (apiService == null) {
-                    apiService = NetworkHelper.getApiServiceClass(API_BASE_URL, true, true, false, APIService.class, new NetWorkConfig());
+                    apiService = NetworkHelper.getInstance().getApiServiceClass(API_BASE_URL, APIService.class, new NetWorkConfig());
                 }
             }
         }

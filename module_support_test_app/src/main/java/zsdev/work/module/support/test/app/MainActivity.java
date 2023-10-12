@@ -1,10 +1,7 @@
 package zsdev.work.module.support.test.app;
 
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
-
-import com.google.android.material.textfield.TextInputEditText;
 
 import zsdev.work.lib.support.mvp.BaseMvpActivity;
 import zsdev.work.lib.support.utils.LogUtil;
@@ -15,11 +12,6 @@ import zsdev.work.module.support.test.app.presenter.MainPresenter;
 
 
 public class MainActivity extends BaseMvpActivity<MainPresenter, ActivityMainBinding> implements MainContract.View {
-
-    TextInputEditText etUsernameLogin;
-    TextInputEditText etPasswordLogin;
-    Button btnSigninLogin;
-
 
     @Override
     public boolean initNetworkStateListener() {
@@ -69,10 +61,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter, ActivityMainBin
     }
 
     public void initView() {
-        etUsernameLogin = (TextInputEditText) findViewById(R.id.et_username_login);
-        etPasswordLogin = (TextInputEditText) findViewById(R.id.et_password_login);
-        btnSigninLogin = (Button) findViewById(R.id.btn_signin_login);
-        btnSigninLogin.setOnClickListener(new View.OnClickListener() {
+        vb.btnSigninLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (getUsername().isEmpty() || getPassword().isEmpty()) {
@@ -89,13 +78,13 @@ public class MainActivity extends BaseMvpActivity<MainPresenter, ActivityMainBin
      * @return 帐号
      */
     private String getUsername() {
-        return etUsernameLogin.getText().toString().trim();
+        return vb.etUsernameLogin.getText().toString().trim();
     }
 
     /**
      * @return 密码
      */
     private String getPassword() {
-        return etPasswordLogin.getText().toString().trim();
+        return vb.etPasswordLogin.getText().toString().trim();
     }
 }

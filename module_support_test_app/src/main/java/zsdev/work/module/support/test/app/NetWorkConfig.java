@@ -31,7 +31,7 @@ public class NetWorkConfig implements INetworkConfig {
     }
 
     @Override
-    public Application getApplicationContext() {
+    public Application setApplicationContext() {
         return App.getApplication();
     }
 
@@ -63,6 +63,11 @@ public class NetWorkConfig implements INetworkConfig {
     @Override
     public boolean setIsEnableCache() {
         return false;
+    }
+
+    @Override
+    public boolean setEnableCookieStore() {
+        return true;
     }
 
     @Override

@@ -17,12 +17,29 @@ if (project.hasProperty("android")) { // Android库
         from android.sourceSets.main.java.srcDirs
     }
     tasks.register('javadoc', Javadoc) {
-        excludes = ['**/*.kt'] // 从javadoc文件中排除所有kotlin文件
+        failOnError = false
         source = android.sourceSets.main.java.srcDirs
-        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-        options.encoding = "utf-8"
-        options.charSet = "utf-8"
+        ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+        classpath += files(ext.androidJar)
     }
+//    task javaDoc(type: Javadoc) {
+//        delete("javadoc/") //清理旧的 javadoc
+//        options {
+//            encoding('UTF-8') //支持中文，避免乱码
+//            charSet('UTF-8') //支持中文，避免乱码
+//            memberLevel = JavadocMemberLevel.PUBLIC //保留 public 的方法
+//            linkSource true
+//            author false //是否保留作者
+//            noTree true //是否生成树状结构
+//            noIndex true
+//            noNavBar true
+//        }
+//        source = android.sourceSets.main.java.srcDirs //生成 javadoc 的源目录
+//        //模块下的第三方库的类名也能被索引{@link}，应对 javadoc 提示“错误：找不到符号”
+//        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+//        destinationDir = file("javadoc/") //生成 javadoc 的目标目录
+//        failOnError false //报错不中断
+//    }
 } else { //Java库
     tasks.register('sourcesJar', Jar) {
         dependsOn classes
@@ -33,12 +50,15 @@ if (project.hasProperty("android")) { // Android库
 
 // 强制Java编码为UTF-8
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = "UTF-8"
+    options.encoding = 'UTF-8'
 }
 
 //强制JavaDoc编码为UTF-8
 tasks.withType(Javadoc).configureEach {
-    options.encoding = "UTF-8"
+    options.encoding = 'UTF-8'
+    options.charSet = 'UTF-8'
+    options.author = true
+    options.version = true
 }
 
 tasks.register('javadocJar', Jar) {
@@ -62,7 +82,7 @@ afterEvaluate {
                 groupId 'work.zsdev' //对应sonatype平台新建中的Group Id
                 artifactId 'lib-utils' //项目唯一标识符，对应项目名称
                 version '1.0.0-SNAPSHOT' //发布的版本 SNAPSHOT
-                //artifact(javadocJar)//将javadoc文档工件打包进aar
+                artifact(javadocJar)//将javadoc文档工件打包进aar
                 artifact(sourcesJar)//将Java注释工件打包进aar
                 // 依赖 bundleDebugAar 任务，并上传其产出的aar
                 artifact(tasks.getByName("bundleDebugAar"))

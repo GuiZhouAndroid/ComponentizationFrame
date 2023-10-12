@@ -17,11 +17,10 @@ if (project.hasProperty("android")) { // Android库
         from android.sourceSets.main.java.srcDirs
     }
     tasks.register('javadoc', Javadoc) {
-        excludes = ['**/*.kt'] // 从javadoc文件中排除所有kotlin文件
+        failOnError = false
         source = android.sourceSets.main.java.srcDirs
-        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-        options.encoding = "utf-8"
-        options.charSet = "utf-8"
+        ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+        classpath += files(ext.androidJar)
     }
 } else { //Java库
     tasks.register('sourcesJar', Jar) {
@@ -38,7 +37,10 @@ tasks.withType(JavaCompile).configureEach {
 
 //强制JavaDoc编码为UTF-8
 tasks.withType(Javadoc).configureEach {
-    options.encoding = "UTF-8"
+    options.encoding = 'UTF-8'
+    options.charSet = 'UTF-8'
+    options.author = true
+    options.version = true
 }
 
 tasks.register('javadocJar', Jar) {
@@ -70,10 +72,12 @@ afterEvaluate {
                 pom.withXml {
                     def dependenciesNode = asNode().appendNode('dependencies')
                     configurations.api.allDependencies.each { dependency ->
-                        def dependencyNode = dependenciesNode.appendNode('dependency')
-                        dependencyNode.appendNode('groupId', dependency.group)
-                        dependencyNode.appendNode('artifactId', dependency.name)
-                        dependencyNode.appendNode('version', dependency.version)
+                        if (dependency.version != "unspecified" && dependency.name != "unspecified") {
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', dependency.group)
+                            dependencyNode.appendNode('artifactId', dependency.name)
+                            dependencyNode.appendNode('version', dependency.version)
+                        }
                     }
                 }
                 //项目配置

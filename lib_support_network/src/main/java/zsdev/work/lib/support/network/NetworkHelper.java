@@ -74,7 +74,7 @@ public class NetworkHelper {
     private static volatile NetworkHelper networkHelperInstance;
 
     /**
-     * 定义retrofit全局网络配置外部接口
+     * 定义retrofit全局网络配置外部接口，全局即是所有服务器URL都默认使用此全局配置，参数传递单次注册方式优先使用，全局配置在单次配置后调用
      */
     private INetworkConfig iNetworkGlobalConfig;
 
@@ -347,10 +347,14 @@ public class NetworkHelper {
     /**
      * 创建Retrofit的Class请求接口，指定使用单次网络配置
      * 首次配置注册后可重复调用，后续网络请求接口时，不需要再次创建retrofit、okhttp、拦截器等实例，直接从map取出来借助RxJava线程调度后返回数据UI显示
+     * 线上正式环境：https://www.prod.com/Service注解的路径，请求参数通过Map集合传入Okhttp遍历添加
+     * 线上测试环境：http://www.test.com/Service注解的路径，请求参数...
+     * 本地开发环境：http://localhost:8085/Service注解的路径，请求参数...
+     * 其它环境等：http://oher/Service注解的路径，请求参数...
      *
      * @param baseUrl      服务器URL
      * @param service      服务class
-     * @param singleConfig 单次网络配置，多baseUrl情况使用，例如：线上正式环境、线上测试环境、本地开发环境、其它环境等。
+     * @param singleConfig 单次网络配置，多baseUrl对应多环境情况使用
      * @param <C>          泛型
      * @return Retrofit对象
      */
