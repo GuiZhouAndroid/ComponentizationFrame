@@ -24,10 +24,10 @@ public interface INetworkConfig {
      *
      * @return 全局上下文
      */
-    Application getApplicationContext();
+    Application setApplicationContext();
 
     /**
-     * 创建OkhttpClient拦截器数组，Retrofit依据配置调用addInterceptor()全部添加
+     * 创建OkhttpClient拦截器数组，Retrofit依据配置调用addInterceptor()全部遍历添加
      *
      * @return 拦截器数组
      */
@@ -67,6 +67,13 @@ public interface INetworkConfig {
      * @return ture启用缓存 false禁用
      */
     boolean setIsEnableCache();
+
+    /**
+     * 是否开启Cookie存储，默认不存储
+     *
+     * @return ture启用存储 false禁用存储
+     */
+    boolean setEnableCookieStore();
 
     /**
      * 缓存有效时间，过期就向服务器重新请求

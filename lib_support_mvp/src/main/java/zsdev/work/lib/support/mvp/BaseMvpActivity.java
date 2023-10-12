@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
@@ -60,7 +59,7 @@ public abstract class BaseMvpActivity<P extends IPresenter, VB extends ViewDataB
      * @param savedInstanceState Activity状态的key-value数据
      */
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@NonNull Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LogUtil.i(TAG, "onCreate()");
         if (viewByResIdBindLayout() > 0) {

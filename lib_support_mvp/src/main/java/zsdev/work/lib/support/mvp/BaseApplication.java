@@ -18,7 +18,7 @@ import zsdev.work.lib.support.utils.LogUtil;
  */
 public class BaseApplication extends MultiDexApplication {
     //全局的Application对象
-    public static BaseApplication baseApplication;
+    private static BaseApplication baseApplication;
 
     private static Context context;
 
