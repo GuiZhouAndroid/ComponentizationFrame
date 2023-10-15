@@ -29,9 +29,16 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    dataBinding {
-        enabled = true
+    //ViewBinding看做DataBinding 功能的子集，ViewBinding有的DataBinding都有，而且还多了数据绑定
+    // AS 4.0以下
+//    dataBinding{
+//        enabled true
+//    }
+    // AS 4.0及以上
+    buildFeatures {
+        dataBinding true
     }
+    //buildFeatures.dataBinding = true
 }
 
 // 组件缓存更新时间设置（默认每次build都更新）

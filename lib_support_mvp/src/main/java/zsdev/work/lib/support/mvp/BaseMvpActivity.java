@@ -19,7 +19,7 @@ import zsdev.work.lib.support.utils.LogUtil;
  * 在Activity基类的子类中持有 P引用（BasePresenter）与 V引用（IBaseView）的目的是为了使用AutoDispose2自动管理维护P和V订阅引用，防止内存泄漏 + 内存溢出
  * Author: 张松
  */
-public abstract class BaseMvpActivity<P extends IPresenter, VB extends ViewDataBinding> extends BaseDialogActivity {
+public abstract class BaseMvpActivity<P extends IPresenter, VDB extends ViewDataBinding> extends BaseDialogActivity {
     /**
      * V持有的P引用
      */
@@ -28,7 +28,7 @@ public abstract class BaseMvpActivity<P extends IPresenter, VB extends ViewDataB
     /**
      * 继承DataBinding的子类
      */
-    protected VB vb;
+    protected VDB topMvpActivityVDB;
 
     /**
      * 创建Presenter
@@ -63,12 +63,22 @@ public abstract class BaseMvpActivity<P extends IPresenter, VB extends ViewDataB
         super.onCreate(savedInstanceState);
         LogUtil.i(TAG, "onCreate()");
         if (viewByResIdBindLayout() > 0) {
-            vb = DataBindingUtil.setContentView(this, viewByResIdBindLayout());//将布局id关联DataBinding
+            //使用DataBindingUtil将布局与activity进行绑定
+            topMvpActivityVDB = DataBindingUtil.setContentView(this, viewByResIdBindLayout());//将布局id关联DataBinding
         }
         initLifecycleObserver(getLifecycle());//初始化生命周期
         initPrepareData(); //初始化准备数据
         setListener(); //监听事件
         doViewBusiness(); //View业务
+    }
+
+    /**
+     * 获取当前MvpActivity的ViewDataBinding实例
+     *
+     * @return ViewDataBinding实例
+     */
+    public VDB getTopMvpActivityVDB() {
+        return topMvpActivityVDB;
     }
 
     /**

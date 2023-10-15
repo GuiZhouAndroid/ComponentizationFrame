@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -32,11 +34,16 @@ import zsdev.work.lib.support.utils.network.newnet.NetworkState;
  * Description: 最基本的Activity，视图层V的Activity基类
  * Author: 张松
  */
-public abstract class BaseActivity extends SwipeBackActivity implements IActivityInitUI, IViewProcess, IActivity, View.OnClickListener, OnDialogCancelListener {
+public abstract class BaseActivity<VDB extends ViewDataBinding> extends SwipeBackActivity implements IActivityInitUI, IViewProcess, IActivity, View.OnClickListener, OnDialogCancelListener {
     /**
      * 日志输出标志
      **/
     protected final String TAG = this.getClass().getSimpleName();
+
+    /**
+     * 继承DataBinding的子类
+     */
+    protected VDB topBaseActivityVDB;
 
     /**
      * 上下文
@@ -179,8 +186,18 @@ public abstract class BaseActivity extends SwipeBackActivity implements IActivit
         setBottomNaviCation(initBottomNaviCation());//设置底部导航栏隐藏
         setFullScreen(initFullScreen());//设置全屏显示
         if (viewByResIdBindLayout() > 0) {
-            setContentView(viewByResIdBindLayout()); //设置View布局
+            //使用DataBindingUtil将布局与activity进行绑定
+            topBaseActivityVDB = DataBindingUtil.setContentView(this, viewByResIdBindLayout());//将布局id关联DataBinding
         }
+    }
+
+    /**
+     * 获取当前BaseActivity的ViewDataBinding实例
+     *
+     * @return ViewDataBinding实例
+     */
+    public VDB getTopBaseActivityVDB() {
+        return topBaseActivityVDB;
     }
 
     @Override
@@ -231,9 +248,10 @@ public abstract class BaseActivity extends SwipeBackActivity implements IActivit
         if (mActivityDialogHelper != null) {
             mActivityDialogHelper = null;
         }
-        if (mNowActivity != null) {
-            mNowActivity = null;
-        }
+        // TODO: 2023/10/15 最初是想在销毁当前Activity时清空持有引用。在其他活动同时持有此引用，会出现空指针异常
+//        if (mNowActivity != null) {
+//            mNowActivity = null;
+//        }
     }
 
     /**
@@ -351,7 +369,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements IActivit
      * @param charSequence 字符文本
      */
     protected void shortShowMsg(CharSequence charSequence) {
-        ToastUtil.showShort(getActivity(), charSequence);
+        ToastUtil.showShort(getApplication(), charSequence);
     }
 
     /**
@@ -360,7 +378,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements IActivit
      * @param msg 字符文本
      */
     protected void shortShowMsg(String msg) {
-        ToastUtil.showShort(getActivity(), msg);
+        ToastUtil.showShort(getApplication(), msg);
     }
 
     /**
@@ -369,7 +387,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements IActivit
      * @param resourceId 资源ID
      */
     protected void shortShowMsg(int resourceId) {
-        ToastUtil.showShort(getActivity(), resourceId);
+        ToastUtil.showShort(getApplication(), resourceId);
     }
 
     /**
@@ -378,7 +396,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements IActivit
      * @param charSequence 字符文本
      */
     protected void longShowMsg(CharSequence charSequence) {
-        ToastUtil.showLong(getActivity(), charSequence);
+        ToastUtil.showLong(getApplication(), charSequence);
     }
 
     /**
@@ -396,7 +414,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements IActivit
      * @param resourceId 资源ID
      */
     protected void longShowMsg(int resourceId) {
-        ToastUtil.showLong(getActivity(), resourceId);
+        ToastUtil.showLong(getApplication(), resourceId);
     }
 
     /**

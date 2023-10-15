@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -22,7 +24,7 @@ import zsdev.work.lib.support.utils.LogUtil;
  * Description: 最基本的Fragment，视图层V的Fragment基类。
  * Author: 张松
  */
-public abstract class BaseFragment extends Fragment implements IViewProcess, IFragment, View.OnClickListener, OnDialogCancelListener {
+public abstract class BaseFragment<VDB extends ViewDataBinding> extends Fragment implements IViewProcess, IFragment, View.OnClickListener, OnDialogCancelListener {
 
     /**
      * 日志输出标志
@@ -30,11 +32,9 @@ public abstract class BaseFragment extends Fragment implements IViewProcess, IFr
     protected final String TAG = this.getClass().getSimpleName();
 
     /**
-     * 视图绑定的View实例
+     * 继承DataBinding的子类
      */
-    protected View viewFragment;
-
-    protected LayoutInflater layoutInflater;
+    protected VDB topBaseFragmentVDB;
 
     /**
      * 当前Fragment所绑定的Activity实例
@@ -74,7 +74,6 @@ public abstract class BaseFragment extends Fragment implements IViewProcess, IFr
         super.onCreate(savedInstanceState);
         LogUtil.i(TAG, "onCreate()");
         mNowFragmentOfActivity = getActivity();
-
     }
 
     /**
@@ -84,16 +83,37 @@ public abstract class BaseFragment extends Fragment implements IViewProcess, IFr
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         LogUtil.i(TAG, "onCreateView()");
-        this.layoutInflater = inflater;
-        if (viewFragment != null) {
-            viewFragment = inflater.inflate(viewByResIdBindLayout(), null);//初始化布局
-        } else {
-            ViewGroup viewGroup = (ViewGroup) viewFragment.getParent();
-            if (viewGroup != null) {
-                viewGroup.removeView(viewFragment);
-            }
+        //使用父类的布局View
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    /**
+     * 在onCreateView（LayoutInflater、ViewGroup、Bundle）返回之后立即调用，
+     * 但在将任何保存的状态还原到视图之前调用。这给了子类一个机会，一旦它们知道自己
+     * 的视图层次结构已经完全创建，就可以对自己进行初始化。然而，片段的视图层次结构此时并未附加到其父级。
+     *
+     * @param view               当前View对象
+     * @param savedInstanceState Bundle对象
+     */
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        LogUtil.i(TAG, "onViewCreated()");
+        //创建自定义对话框
+        if (mFragmentDialogHelper == null) {
+            mFragmentDialogHelper = new DialogHelper(getFragmentOfActivity(), this);
         }
-        return viewFragment;
+        //使用DataBindingUtil将布局与Fragment进行绑定
+        topBaseFragmentVDB = DataBindingUtil.bind(view);
+    }
+
+    /**
+     * 获取当前Fragment的ViewDataBinding实例
+     *
+     * @return ViewDataBinding实例
+     */
+    public VDB getTopBaseFragmentVDB() {
+        return topBaseFragmentVDB;
     }
 
     /**
@@ -115,24 +135,6 @@ public abstract class BaseFragment extends Fragment implements IViewProcess, IFr
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         LogUtil.i(TAG, "onActivityCreated()");
-    }
-
-    /**
-     * 在onCreateView（LayoutInflater、ViewGroup、Bundle）返回之后立即调用，
-     * 但在将任何保存的状态还原到视图之前调用。这给了子类一个机会，一旦它们知道自己
-     * 的视图层次结构已经完全创建，就可以对自己进行初始化。然而，片段的视图层次结构此时并未附加到其父级。
-     *
-     * @param view               当前View对象
-     * @param savedInstanceState Bundle对象
-     */
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        LogUtil.i(TAG, "onViewCreated()");
-        //创建自定义对话框
-        if (mFragmentDialogHelper == null) {
-            mFragmentDialogHelper = new DialogHelper(getFragmentOfActivity(), this);
-        }
     }
 
     /**
@@ -178,7 +180,6 @@ public abstract class BaseFragment extends Fragment implements IViewProcess, IFr
     public void onDestroyView() {
         super.onDestroyView();
         LogUtil.i(TAG, "onDestroyView()");
-        this.viewFragment = null;
         //释放对话框
         if (mFragmentDialogHelper != null) {
             mFragmentDialogHelper = null;
@@ -205,7 +206,7 @@ public abstract class BaseFragment extends Fragment implements IViewProcess, IFr
     public void onDestroy() {
         super.onDestroy();
         LogUtil.i(TAG, "onDestroy()");
-        this.viewFragment = null;
+        // TODO: 2023/10/14 有可能导致空指针异常，使用Fragment时需测试
         //释放对话框
         if (mFragmentDialogHelper != null) {
             mFragmentDialogHelper = null;
