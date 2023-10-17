@@ -80,9 +80,12 @@ public abstract class BaseMvpFragment<P extends IPresenter, VDB extends ViewData
         //使用DataBindingUtil将布局与Fragment进行绑定
         topMvpFragmentVDB = DataBindingUtil.bind(view);
         initLifecycleObserver(getLifecycle());//初始化生命周期
-        initPrepareData();//初始化准备数据
-        setListener(); //监听事件
-        doViewBusiness(); //View业务
+        //使用BaseMvpFragment必须设置false
+        if (!initSwitchFragmentProcess()) {
+            initData(); //初始化准备数据
+            doClickListener(); //监听事件
+            doViewBusiness(); //View业务
+        }
     }
 
     /**

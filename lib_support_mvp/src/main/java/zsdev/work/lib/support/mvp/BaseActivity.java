@@ -34,7 +34,7 @@ import zsdev.work.lib.support.utils.network.newnet.NetworkState;
  * Description: 最基本的Activity，视图层V的Activity基类
  * Author: 张松
  */
-public abstract class BaseActivity<VDB extends ViewDataBinding> extends SwipeBackActivity implements IActivityInitUI, IViewProcess, IActivity, View.OnClickListener, OnDialogCancelListener {
+public abstract class BaseActivity<VDB extends ViewDataBinding> extends SwipeBackActivity implements IActivityInit, IViewProcess, IActivity, OnDialogCancelListener {
     /**
      * 日志输出标志
      **/
@@ -185,9 +185,15 @@ public abstract class BaseActivity<VDB extends ViewDataBinding> extends SwipeBac
         setTopHideStatus(initTopHideStatus());//设置顶部状态栏隐藏
         setBottomNaviCation(initBottomNaviCation());//设置底部导航栏隐藏
         setFullScreen(initFullScreen());//设置全屏显示
-        if (viewByResIdBindLayout() > 0) {
+        if (viewBindLayout() > 0) {
             //使用DataBindingUtil将布局与activity进行绑定
-            topBaseActivityVDB = DataBindingUtil.setContentView(this, viewByResIdBindLayout());//将布局id关联DataBinding
+            topBaseActivityVDB = DataBindingUtil.setContentView(this, viewBindLayout());//将布局id关联DataBinding
+        }
+        //使用BaseActivity必须设置true
+        if (initSwitchActivityProcess()) {
+            initData(); //初始化准备数据
+            doClickListener(); //监听事件
+            doViewBusiness(); //View业务
         }
     }
 
@@ -252,16 +258,6 @@ public abstract class BaseActivity<VDB extends ViewDataBinding> extends SwipeBac
 //        if (mNowActivity != null) {
 //            mNowActivity = null;
 //        }
-    }
-
-    /**
-     * View单击的监听事件
-     *
-     * @param v 当前View对象
-     */
-    @Override
-    public void onClick(View v) {
-        viewClick(v);
     }
 
     /**

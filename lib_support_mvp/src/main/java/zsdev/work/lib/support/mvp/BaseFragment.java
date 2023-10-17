@@ -24,7 +24,7 @@ import zsdev.work.lib.support.utils.LogUtil;
  * Description: 最基本的Fragment，视图层V的Fragment基类。
  * Author: 张松
  */
-public abstract class BaseFragment<VDB extends ViewDataBinding> extends Fragment implements IViewProcess, IFragment, View.OnClickListener, OnDialogCancelListener {
+public abstract class BaseFragment<VDB extends ViewDataBinding> extends Fragment implements IFragmentInit, IViewProcess, IFragment, OnDialogCancelListener {
 
     /**
      * 日志输出标志
@@ -105,6 +105,12 @@ public abstract class BaseFragment<VDB extends ViewDataBinding> extends Fragment
         }
         //使用DataBindingUtil将布局与Fragment进行绑定
         topBaseFragmentVDB = DataBindingUtil.bind(view);
+        //使用BaseFragment必须设置true
+        if (initSwitchFragmentProcess()) {
+            initData(); //初始化准备数据
+            doClickListener(); //监听事件
+            doViewBusiness(); //View业务
+        }
     }
 
     /**
@@ -114,16 +120,6 @@ public abstract class BaseFragment<VDB extends ViewDataBinding> extends Fragment
      */
     public VDB getTopBaseFragmentVDB() {
         return topBaseFragmentVDB;
-    }
-
-    /**
-     * View单击的监听事件
-     *
-     * @param v 当前View对象
-     */
-    @Override
-    public void onClick(View v) {
-        viewClick(v);
     }
 
     /**

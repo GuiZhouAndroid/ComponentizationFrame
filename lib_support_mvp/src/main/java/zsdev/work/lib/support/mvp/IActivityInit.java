@@ -2,10 +2,10 @@ package zsdev.work.lib.support.mvp;
 
 /**
  * Created: by 2023-09-20 11:04
- * Description: Activity基类特殊部分的UI业务接口，非强制实现。
+ * Description: Activity基类其他业务接口
  * Author: 张松
  */
-public interface IActivityInitUI {
+public interface IActivityInit {
 
     /**
      * 初始化网络监听，默认禁用
@@ -58,6 +58,15 @@ public interface IActivityInitUI {
      * @return true：状态栏+导航栏全透明 false：状态栏+导航栏非透明
      */
     default boolean initFullScreen() {
+        return false;
+    }
+
+    /**
+     * 初始化Activity流程开关状态，默认禁用
+     *
+     * @return true：开启业务方法 false：禁用业务方法
+     */
+    default boolean initSwitchActivityProcess() {
         return false;
     }
 }
