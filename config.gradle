@@ -45,7 +45,7 @@ project.ext {
     // “推完aar库后true为使用本地库，false为使用远程自制库”
     isUseLocalSupportLib = true
 
-    // 以下配置：构建上次修改时间：2023.10.10
+    // 以下配置：构建上次修改时间：2023.10.15
     // 定义 android 变量 , 类型是字典 Map 集合
     // 其中定义了若干键值对集合
     androidConfig = ["compileSdk"       : 34,
@@ -67,25 +67,26 @@ project.ext {
     //命名空间
     namespaceConfig = [
             //自制library
-            "namespace_lib_support_all_lib"        : 'zsdev.work.lib.support.all.lib',
-            "namespace_lib_support_resource"       : 'zsdev.work.lib.support.resource',
-            "namespace_lib_support_dialog"         : 'zsdev.work.lib.support.dialog',
-            "namespace_lib_support_mvp"            : 'zsdev.work.lib.support.mvp',
-            "namespace_lib_support_network"        : 'zsdev.work.lib.support.network',
-            "namespace_lib_support_swipeback"      : 'zsdev.work.lib.support.swipeback',
-            "namespace_lib_support_utils"          : "zsdev.work.lib.support.utils",
+            "namespace_lib_support_all_lib"          : 'zsdev.work.lib.support.all.lib',
+            "namespace_lib_support_resource"         : 'zsdev.work.lib.support.resource',
+            "namespace_lib_support_dialog"           : 'zsdev.work.lib.support.dialog',
+            "namespace_lib_support_mvp"              : 'zsdev.work.lib.support.mvp',
+            "namespace_lib_support_network"          : 'zsdev.work.lib.support.network',
+            "namespace_lib_support_swipeback"        : 'zsdev.work.lib.support.swipeback',
+            "namespace_lib_support_utils"            : "zsdev.work.lib.support.utils",
+            "namespace_lib_support_fg_oauth_android_sdk": "zsdev.work.lib.support.fg.oauth.android.sdk",
 
             //框架library
-            "namespace_lib_frame_core"             : 'zsdev.work.lib.frame.core',
+            "namespace_lib_frame_core"               : 'zsdev.work.lib.frame.core',
 
             //业务module
-            "namespace_module_business_fgstore_app": "com.zhangsong.fgstore",
-            "namespace_module_business_main"       : "zsdev.work.module.business.main",
-            "namespace_module_business_oneself"    : "zsdev.work.module.business.oneself",
-            "namespace_module_business_pay"        : "zsdev.work.module.business.pay",
+            "namespace_module_business_fgstore_app"  : "com.zhangsong.fgstore",
+            "namespace_module_business_main"         : "zsdev.work.module.business.main",
+            "namespace_module_business_oneself"      : "zsdev.work.module.business.oneself",
+            "namespace_module_business_pay"          : "zsdev.work.module.business.pay",
 
             //测试module
-            "namespace_module_support_test_app"    : "zsdev.work.module.support.test.app",
+            "namespace_module_support_test_app"      : "zsdev.work.module.support.test.app",
     ]
 
     // 统一管理依赖库  ${} 表示引用之前定义的变量
@@ -165,6 +166,9 @@ project.ext {
             "library"                       : "cc.cloudist.acplibrary:library:1.2.1", //https://github.com/Cloudist/ACProgressLite
 
             //lottie
-            "lottie"                        : "'com.airbnb.android:lottie:2.8.0'"
+            "lottie"                        : "com.airbnb.android:lottie:2.8.0",
+
+            //微信SDK最新版
+            "wechat-sdk-android"            : "com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+",
     ]
 }

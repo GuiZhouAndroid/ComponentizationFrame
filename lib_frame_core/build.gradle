@@ -45,6 +45,8 @@ dependencies {
     api(dep["arouter-api"])
     //APP设置模块
     api(dep["preference"])
+    //微信SDK最新版
+    api(dep["wechat-sdk-android"])
 
     // ----------------使用本地资源库，统一管理图片、各类xml等-----------------
     //框架资源库

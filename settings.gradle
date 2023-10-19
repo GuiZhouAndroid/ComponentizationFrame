@@ -38,6 +38,7 @@ include ':lib_support_swipeback' //滑动返回库
 include ':lib_support_mvp' //mvp架构库
 include ':lib_support_dialog' //对话框库
 include ':lib_support_all_lib' //所有自制aar插件总库（也可在lib_support_all_core中单独依赖aar）
+include ':lib_support_fg_oauth_android_sdk' //oauthSDK
 
 //框架library
 include ':lib_frame_core' //框架支持库
