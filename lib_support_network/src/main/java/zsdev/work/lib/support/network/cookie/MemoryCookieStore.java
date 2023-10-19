@@ -27,27 +27,35 @@ public class MemoryCookieStore implements CookieStore {
     /**
      * 存储Cookie
      *
-     * @param url     Sp的key值url
-     * @param cookies Cookie集合
+     * @param url            Sp的key值url
+     * @param newCookiesList 新Cookie集合
      */
     @Override
-    public void addCookieByHttpUrl(HttpUrl url, List<Cookie> cookies) {
-        List<Cookie> oldCookies = allCookies.get(url.host());
-        if (oldCookies != null) {
-            Iterator<Cookie> itNew = cookies.iterator();
-            Iterator<Cookie> itOld = oldCookies.iterator();
-            while (itNew.hasNext()) {
-                String va = itNew.next().name();
-                while (va != null && itOld.hasNext()) {
-                    String v = itOld.next().name();
-                    if (v != null && va.equals(v)) {
-                        itOld.remove();
+    public void addCookieByHttpUrl(HttpUrl url, List<Cookie> newCookiesList) {
+        //先根据本次请求url从map取Cookie旧数据
+        List<Cookie> oldCookiesList = allCookies.get(url.host());
+        if (oldCookiesList != null) { //此url有旧Cookie，就要覆盖为新cookies
+            Iterator<Cookie> itNewCookies = newCookiesList.iterator();
+            Iterator<Cookie> itOldCookies = oldCookiesList.iterator();
+            //遍历新Cookie集合，取出新name
+            while (itNewCookies.hasNext()) {
+                String newCookieName = itNewCookies.next().name();
+                //遍历新Cookie集合，取出旧name
+                while (itOldCookies.hasNext()) {
+                    String oldCookieName = itOldCookies.next().name();
+                    //新旧Name对比，若Name匹配成功，即是同个Cookie信息，那么将旧Cookie数据清空
+                    if (newCookieName.equals(oldCookieName)) {
+                        //无旧Cookie数据
+                        itOldCookies.remove();
                     }
                 }
             }
-            oldCookies.addAll(cookies);
-        } else {
-            allCookies.put(url.host(), cookies);
+            //用oldCookies空集合，装载新Cookie数据
+            oldCookiesList.addAll(newCookiesList);
+            //存map
+            allCookies.put(url.host(), oldCookiesList);
+        } else { //此url无旧Cookie，直接存map
+            allCookies.put(url.host(), newCookiesList);
         }
     }
 

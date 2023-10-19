@@ -4,6 +4,7 @@ import android.net.ParseException;
 
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
+import com.squareup.moshi.JsonDataException;
 
 import org.json.JSONException;
 
@@ -132,9 +133,9 @@ public class ExceptionHandle {
             ex = new ResponseThrowable(resultException, resultException.getCode());
             ex.setMsg(resultException.getMsg());
             return ex;
-        } else if (e instanceof JsonParseException || e instanceof JSONException || e instanceof ParseException) {
+        } else if (e instanceof JsonParseException || e instanceof JSONException || e instanceof ParseException || e instanceof JsonDataException) {
             ex = new ResponseThrowable(e, NetworkError.PARSE_ERROR);
-            ex.setMsg("数据解析错误！");
+            ex.setMsg("数据解析错误！攻城狮正在修复...");
             return ex;
         } else if (e instanceof ConnectException || e instanceof SocketTimeoutException || e instanceof SocketException || e instanceof SocketTimeoutException) {
             ex = new ResponseThrowable(e, NetworkError.NETWORK_ERROR);
@@ -142,7 +143,7 @@ public class ExceptionHandle {
             return ex;
         } else if (e instanceof SSLHandshakeException) {
             ex = new ResponseThrowable(e, NetworkError.SSL_ERROR);
-            ex.setMsg("证书验证失败！");
+            ex.setMsg("证书验证失败！攻城狮正在修复...");
             return ex;
         } else if (e instanceof UnknownHostException) {
             ex = new ResponseThrowable(e, NetworkError.HTTP_ERROR);

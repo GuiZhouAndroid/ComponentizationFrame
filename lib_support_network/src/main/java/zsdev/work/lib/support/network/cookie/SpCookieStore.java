@@ -3,7 +3,6 @@ package zsdev.work.lib.support.network.cookie;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -35,7 +34,7 @@ public class SpCookieStore implements CookieStore {
     /**
      * 日志标记
      */
-    private static final String Log_TAG = "SpCookieStore";
+    private static final String TAG = "SpCookieStore";
 
     /**
      * Sp的XML文件名
@@ -247,7 +246,7 @@ public class SpCookieStore implements CookieStore {
             ObjectOutputStream outputStream = new ObjectOutputStream(os);
             outputStream.writeObject(cookie);
         } catch (IOException e) {
-            Log.d(Log_TAG, "IOException in encodeCookie", e);
+            LogUtil.i(TAG, "IOException in encodeCookie：" + e);
             return null;
         }
 
@@ -268,9 +267,9 @@ public class SpCookieStore implements CookieStore {
             ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
             cookie = ((SpCookieSerializable) objectInputStream.readObject()).getCookies();
         } catch (IOException e) {
-            Log.d(Log_TAG, "IOException in decodeCookie", e);
+            LogUtil.i(TAG, "IOException in decodeCookie：" + e);
         } catch (ClassNotFoundException e) {
-            Log.d(Log_TAG, "ClassNotFoundException in decodeCookie", e);
+            LogUtil.i(TAG, "ClassNotFoundException in decodeCookie：" + e);
         }
         return cookie;
     }
