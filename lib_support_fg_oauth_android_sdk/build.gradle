@@ -1,0 +1,40 @@
+plugins {
+    id 'com.android.library'
+}
+
+//sonatype平台的maven中央库配置文件
+//发布版
+//apply from: "release-sonatype-publish.gradle"
+//开发版
+apply from: "snapshot-sonatype-publish.gradle"
+
+//config.gradle根目录变量全局
+def app = rootProject.ext.androidConfig
+def appNamespaceConfig = rootProject.ext.namespaceConfig
+def dep = rootProject.ext.dependenciesConfig
+
+android {
+    namespace appNamespaceConfig["namespace_lib_support_fg_oauth_android_sdk"]
+    compileSdk app["compileSdk"]
+    buildToolsVersion app["buildToolsVersion"]
+
+    defaultConfig {
+        minSdk app["minSdk"]
+        consumerProguardFiles "consumer-rules.pro"
+        multiDexEnabled true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // 组件缓存更新时间设置（默认每次build都更新）
+    configurations.configureEach {
+        resolutionStrategy.cacheChangingModulesFor 0, 'minutes'
+    }
+}
+
+dependencies {
+
+}
