@@ -4,6 +4,7 @@
     <application>
         <activity
             android:name=".HandleActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:launchMode="singleTask" />
     </application>
 </manifest>

@@ -9,6 +9,9 @@ import android.content.Context;
  */
 public class FGAPIFactory {
 
+    //授权回调接口
+    protected static IOAuthResponse mIOAuthResponse;
+
     private FGAPIFactory() {
         throw new RuntimeException(FGAPIFactory.class.getSimpleName() + "cannot instantiate!");
     }
@@ -17,7 +20,12 @@ public class FGAPIFactory {
         return new FGApiImpl(context);
     }
 
-    public static ICallBack getCode() {
-        return new CallBackImpl();
+    /**
+     * IOAuthResponse 接口的实例
+     *
+     * @param iOAuthResponse IOAuthResponse实例
+     */
+    public static void setOAuthResponseCallbackListener(IOAuthResponse iOAuthResponse) {
+        mIOAuthResponse = iOAuthResponse;
     }
 }
